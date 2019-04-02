@@ -17,6 +17,7 @@
 #' simulated diet endpoint individual
 #' @export
 #'
+#'
 #' @examples
 makefood <- function(num_sources, popsize, mu_carb, var_carb) {
   food <- list()
