@@ -1,4 +1,3 @@
-
 #' Make food
 #'
 #' Simulates the 13C isotope values for an arbitray number of potential diet
@@ -16,7 +15,6 @@
 #' @return A list, each element of which is a vector of isotope vales for each
 #' simulated diet endpoint individual
 #' @export
-#'
 #'
 #' @examples
 makefood <- function(num_sources, popsize, mu_carb, var_carb) {
