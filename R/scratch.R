@@ -11,11 +11,14 @@ sd_nit <- c(0,1,10)
 
 
 diet_prop <- c(.1, .25, .65)
-steps <- 100
-num_individ <- 10
+steps <- 10
+num_individ <- 2
 
+#make the food sources
 food <- makefood(3, popsize, mu_carb, sd_carb, mu_nit, sd_nit)
 
+#simulate agents over time
 specimens <- eatfood(num_individ, steps, num_sources, diet_prop, food)
 
-getiso(specimens, time = 100, window =4)
+#collect "observed" isotop values
+obs_iso <- getiso(specimens, time = steps, window = 4)
