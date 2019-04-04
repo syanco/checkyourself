@@ -19,3 +19,11 @@ getiso <- function(window, time, food){
   isos <- lapply(food, gettissue, window = window, time = time)
   return(isos)
 }
+
+#convenience fucntion to format "observed" isodata into a dataframe with columns
+#for d13C and d15N and each row being an indivdiual observation
+formatiso <- function(iso){
+  dat <- data.frame(matrix(unlist(iso), ncol = 2, byrow = T))
+  names(dat) <- c("d13C", "d15N")
+  return(dat)
+}

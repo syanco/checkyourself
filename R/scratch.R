@@ -11,8 +11,8 @@ sd_nit <- c(0,1,10)
 
 
 diet_prop <- c(.1, .25, .65)
-steps <- 10
-num_individ <- 2
+steps <- 100
+num_individ <- 100
 
 #make the food sources
 food <- makefood(3, popsize, mu_carb, sd_carb, mu_nit, sd_nit)
@@ -21,4 +21,10 @@ food <- makefood(3, popsize, mu_carb, sd_carb, mu_nit, sd_nit)
 specimens <- eatfood(num_individ, steps, num_sources, diet_prop, food)
 
 #collect "observed" isotop values
-obs_iso <- getiso(specimens, time = steps, window = 4)
+obs_iso <- getiso(specimens, time = steps, window = 10)
+
+#format to data frame ans save as csv for import to MixSIAR
+
+
+#sample analysis
+library(MixSIAR)

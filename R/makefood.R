@@ -12,9 +12,9 @@
 #' @param sd_carb vector whose length = 'num_sources', each entry of which is
 #' the standard deviation of the 13C of the diet source population to simulate
 #'#' @param mu_nit vector whose length = 'num_sources', each entry of which is
-#' the mean 14N value of the diet source population to simulate
+#' the mean 15N value of the diet source population to simulate
 #' @param sd_nit vector whose length = 'num_sources', each entry of which is
-#' the standard deviation of the 14N of the diet source population to simulate
+#' the standard deviation of the 15N of the diet source population to simulate
 #'
 #' @return A list, each element of which is a vector of isotope vales for each
 #' simulated diet endpoint individual
