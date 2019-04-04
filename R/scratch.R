@@ -4,10 +4,10 @@ source("R/gettissueiso.R")
 
 num_sources <- 3
 popsize <- c(1000,1000,1000)
-mu_carb <- c(1, 100, 1000)
+mu_carb <- c(-1, -10, -30)
 sd_carb <- c(0,1,10)
-mu_nit <- c(1, 100, 1000)
-sd_nit <- c(0,1,10)
+mu_nit <- c(4, 6, 10)
+sd_nit <- c(1,1,1)
 
 
 diet_prop <- c(.1, .25, .65)
@@ -24,7 +24,7 @@ specimens <- eatfood(num_individ, steps, num_sources, diet_prop, food)
 obs_iso <- getiso(specimens, time = steps, window = 10)
 
 #format to data frame ans save as csv for import to MixSIAR
-
+simdata <- formatiso(obs_iso, filename = "simulated_iso.csv")
 
 #sample analysis
 library(MixSIAR)

@@ -46,3 +46,4 @@ eatfood <- function(num_individ, steps, num_sources, diet_prop, food) {
                            simplify = F) #force the result to be a list
   return(diethistory)
 }
+

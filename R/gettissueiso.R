@@ -22,8 +22,22 @@ getiso <- function(window, time, food){
 
 #convenience fucntion to format "observed" isodata into a dataframe with columns
 #for d13C and d15N and each row being an indivdiual observation
-formatiso <- function(iso){
+#default is to write the object to a .csv file but can also return dataframe as
+#an object
+formatiso <- function(iso, filename, writefile = T, returnobject = F){
+  #error checks
+  if(!is.character(filename))
+    stop("Filename must be supplied as a character string")
+
+  #format data
   dat <- data.frame(matrix(unlist(iso), ncol = 2, byrow = T))
   names(dat) <- c("d13C", "d15N")
-  return(dat)
+
+  #write file routine
+  if(writefile == T)
+    write.csv(dat, filename)
+
+  #return dataframe routine
+  if(returnobject == T)
+    return(dat)
 }

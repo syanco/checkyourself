@@ -42,3 +42,22 @@ makefood <- function(num_sources, popsize, mu_carb, sd_carb, mu_nit, sd_nit) {
   return(food)
   }
 
+savesources <- function(food, filename, mu_carb, sd_carb, mu_nit, sd_nit,
+                        writefile = T, returnobject = F){
+  #error checks
+  if(!is.character(filename))
+    stop("Filename must be supplied as a character string")
+
+  #format data
+  dat <- data.frame("Sources" = 1:length(food), "Meand15N" = mu_nit,
+                    "SDd15N" = sd_nit, "Meand13C" = mu_carb,
+                    "SDd13C" = sd_carb)
+
+  #write file routine
+  if(writefile == T)
+    write.csv(dat, filename)
+
+  #return dataframe routine
+  if(returnobject == T)
+    return(dat)
+}
