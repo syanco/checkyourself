@@ -5,12 +5,16 @@ source("R/gettissueiso.R")
 num_sources <- 3
 popsize <- c(1000,1000,1000)
 mu_carb <- c(1, 100, 1000)
-var_carb <- c(0,1,10)
+sd_carb <- c(0,1,10)
+mu_nit <- c(1, 100, 1000)
+sd_nit <- c(0,1,10)
+
+
 diet_prop <- c(.1, .25, .65)
 steps <- 100
 num_individ <- 10
 
-food <- makefood(3, popsize, mu_carb, var_carb)
+food <- makefood(3, popsize, mu_carb, sd_carb, mu_nit, sd_nit)
 
 specimens <- eatfood(num_individ, steps, num_sources, diet_prop, food)
 
