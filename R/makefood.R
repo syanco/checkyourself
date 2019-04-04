@@ -43,7 +43,7 @@ makefood <- function(num_sources, popsize, mu_carb, sd_carb, mu_nit, sd_nit) {
   }
 
 savesources <- function(food, filename, mu_carb, sd_carb, mu_nit, sd_nit,
-                        writefile = T, returnobject = F){
+                        popsize, writefile = T, returnobject = F){
   #error checks
   if(!is.character(filename))
     stop("Filename must be supplied as a character string")
@@ -51,11 +51,32 @@ savesources <- function(food, filename, mu_carb, sd_carb, mu_nit, sd_nit,
   #format data
   dat <- data.frame("Sources" = 1:length(food), "Meand15N" = mu_nit,
                     "SDd15N" = sd_nit, "Meand13C" = mu_carb,
-                    "SDd13C" = sd_carb)
+                    "SDd13C" = sd_carb, "n" = popsize)
 
   #write file routine
   if(writefile == T)
-    write.csv(dat, filename)
+    write.csv(dat, filename, row.names=FALSE)
+
+  #return dataframe routine
+  if(returnobject == T)
+    return(dat)
+}
+
+savediscrimination <- function(food, filename, discr_carb = c(0,0,0),
+                               discr_nit = c(0,0,0), writefile = T,
+                               returnobject = F){
+  #error checks
+  if(!is.character(filename))
+    stop("Filename must be supplied as a character string")
+
+  #format data
+  dat <- data.frame("Sources" = 1:length(food), "Meand15N" = discr_nit,
+                    "SDd15N" = discr_nit, "Meand13C" = discr_carb,
+                    "SDd13C" = discr_carb)
+
+  #write file routine
+  if(writefile == T)
+    write.csv(dat, filename, row.names=FALSE)
 
   #return dataframe routine
   if(returnobject == T)

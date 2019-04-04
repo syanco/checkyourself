@@ -35,7 +35,7 @@ formatiso <- function(iso, filename, writefile = T, returnobject = F){
 
   #write file routine
   if(writefile == T)
-    write.csv(dat, filename)
+    write.csv(dat, filename, row.names=FALSE)
 
   #return dataframe routine
   if(returnobject == T)
