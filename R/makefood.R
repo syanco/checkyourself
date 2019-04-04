@@ -22,10 +22,22 @@
 #'
 #' @examples
 makefood <- function(num_sources, popsize, mu_carb, sd_carb, mu_nit, sd_nit) {
+  #error checks
+  if(length(mu_carb) != num_sources)
+    stop("You must provide exactly 1 d13C mean for each proposed source")
+  if(length(sd_carb) != num_sources)
+    stop("You must provide exactly 1 d13C sd for each proposed source")
+  if(length(mu_nit) != num_sources)
+    stop("You must provide exactly 1 d15N mean for each proposed source")
+  if(length(sd_nit) != num_sources)
+    stop("You must provide exactly 1 d15N sd for each proposed source")
+
+  #initialize list to hold simulated food data
   food <- list()
+  #loop through each source to generate carban and nitrogen values
   for(i in 1:num_sources){
     food[[i]] <- list(rnorm(n = popsize[i], mean = mu_carb[i], sd = sd_carb[i]),
-                   rnorm(n = popsize[i], mean = mu_nit[i], sd = sd_nit[i]))
+                      rnorm(n = popsize[i], mean = mu_nit[i], sd = sd_nit[i]))
     }
   return(food)
   }
