@@ -1,4 +1,4 @@
-#' Make food
+#' makefood
 #'
 #' Simulates the 13C isotope values for an arbitray number of potential diet
 #' endpoints. Each endpoint population is simulated as a normally distributed
@@ -67,7 +67,6 @@ makefood <- function(num_sources, popsize, mu_carb, sd_carb, mu_nit, sd_nit) {
 #' @examples
 savesources <- function(food, filename = NULL, mu_carb, sd_carb, mu_nit,
                         sd_nit, popsize, writefile = T, returnobject = F){
-
 
   #format data
   dat <- data.frame("Sources" = 1:length(food), "Meand15N" = mu_nit,
