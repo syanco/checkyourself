@@ -2,3 +2,14 @@
 .Rhistory
 .RData
 .Ruserdata
+summary_statistics.txt
+MixSIAR_sim_test_model_040419.txt
+diagnostics.pdf
+diagnostics.txt
+isospace_plot_1_2.pdf
+pairs_plot.pdf
+posterior_density_diet_p_global.pdf
+prior_plot.pdf
+simulated_discrimination.csv
+simulated_iso.csv
+simulated_sources.csv
