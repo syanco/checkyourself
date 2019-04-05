@@ -7,7 +7,7 @@ num_sources <- 3 #number of diet endpoints
 popsize <- c(1000,1000,1000) #size of each pop to simulate
 mu_carb <- c(-1, -10, -30) #vector of mean carbon values for each source
 sd_carb <- c(1,1,1) #vector of carbon source sds
-mu_nit <- c(4,6,11) #vector of carbon discrimination factors (set to 0)
+mu_nit <- c(10,6,11) #vector of carbon discrimination factors (set to 0)
 sd_nit <-c(1,1,1) #vector of nitrogen discrimination factors (set to 0)
 diet_prop <- c(.1, .25, .65) #"real" proportional diet composition
 steps <- 100 #number of steps per model run
@@ -65,17 +65,17 @@ plot_prior(alpha.prior=1, source)
 
 # Write the JAGS model file
 model_filename <- "MixSIAR_sim_test_model_040419.txt"
-resid_err <- TRUE
+resid_err <- FALSE
 process_err <- TRUE
 write_JAGS_model(model_filename, resid_err, process_err, mix, source)
 
 #run the model (using a 'test' lengthed chain)
-jags.1 <- run_model(run="test", mix, source, discr, model_filename,
+jags.1 <- run_model(run="very short", mix, source, discr, model_filename,
                     alpha.prior = 1, resid_err, process_err)
 
 #if test works, run analysis length
-jags.1 <- run_model(run="normal", mix, source, discr, model_filename,
-                    alpha.prior = 1, resid_err, process_err)
+#jags.1 <- run_model(run="normal", mix, source, discr, model_filename,
+#                    alpha.prior = 1, resid_err, process_err)
 
 #set JAGS output options
 output_options <- list(summary_save = TRUE,
