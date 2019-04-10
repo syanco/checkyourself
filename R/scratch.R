@@ -53,51 +53,51 @@ source <- load_source_data(filename="simulated_sources.csv",
 #load discrimination data
 discr <- load_discr_data(filename="simulated_discrimination.csv", mix)
 
-#make plot of the isoscape
-plot_data(filename="isospace_plot", plot_save_pdf=TRUE, plot_save_png=FALSE,
-          mix, source, discr)
+# #make plot of the isoscape
+# plot_data(filename="isospace_plot", plot_save_pdf=TRUE, plot_save_png=FALSE,
+#           mix, source, discr)
+#
+# #calculate convex hull of isoscape
+# calc_area(source=source, mix=mix, discr=discr)
+#
+# #plot priors (using generalist/uninformative prior)
+# plot_prior(alpha.prior=1, source)
+#
+# # Write the JAGS model file
+# model_filename <- "MixSIAR_sim_test_model_040419.txt"
+# resid_err <- FALSE
+# process_err <- TRUE
+# write_JAGS_model(model_filename, resid_err, process_err, mix, source)
 
-#calculate convex hull of isoscape
-calc_area(source=source, mix=mix, discr=discr)
-
-#plot priors (using generalist/uninformative prior)
-plot_prior(alpha.prior=1, source)
-
-# Write the JAGS model file
-model_filename <- "MixSIAR_sim_test_model_040419.txt"
-resid_err <- FALSE
-process_err <- TRUE
-write_JAGS_model(model_filename, resid_err, process_err, mix, source)
-
-#run the model (using a 'test' lengthed chain)
-jags.1 <- run_model(run="very short", mix, source, discr, model_filename,
-                    alpha.prior = 1, resid_err, process_err)
-
-#if test works, run analysis length
-#jags.1 <- run_model(run="normal", mix, source, discr, model_filename,
-#                    alpha.prior = 1, resid_err, process_err)
-
-#set JAGS output options
-output_options <- list(summary_save = TRUE,
-                       summary_name = "summary_statistics",
-                       sup_post = FALSE,
-                       plot_post_save_pdf = TRUE,
-                       plot_post_name = "posterior_density",
-                       sup_pairs = FALSE,
-                       plot_pairs_save_pdf = TRUE,
-                       plot_pairs_name = "pairs_plot",
-                       sup_xy = TRUE,
-                       plot_xy_save_pdf = FALSE,
-                       plot_xy_name = "xy_plot",
-                       gelman = TRUE,
-                       heidel = FALSE,
-                       geweke = TRUE,
-                       diag_save = TRUE,
-                       diag_name = "diagnostics",
-                       indiv_effect = FALSE,
-                       plot_post_save_png = FALSE,
-                       plot_pairs_save_png = FALSE,
-                       plot_xy_save_png = FALSE)
-
-#view the output
-output_JAGS(jags.1, mix, source, output_options)
+# #run the model (using a 'test' lengthed chain)
+# jags.1 <- run_model(run="very short", mix, source, discr, model_filename,
+#                     alpha.prior = 1, resid_err, process_err)
+#
+# #if test works, run analysis length
+# #jags.1 <- run_model(run="normal", mix, source, discr, model_filename,
+# #                    alpha.prior = 1, resid_err, process_err)
+#
+# #set JAGS output options
+# output_options <- list(summary_save = TRUE,
+#                        summary_name = "summary_statistics",
+#                        sup_post = FALSE,
+#                        plot_post_save_pdf = TRUE,
+#                        plot_post_name = "posterior_density",
+#                        sup_pairs = FALSE,
+#                        plot_pairs_save_pdf = TRUE,
+#                        plot_pairs_name = "pairs_plot",
+#                        sup_xy = TRUE,
+#                        plot_xy_save_pdf = FALSE,
+#                        plot_xy_name = "xy_plot",
+#                        gelman = TRUE,
+#                        heidel = FALSE,
+#                        geweke = TRUE,
+#                        diag_save = TRUE,
+#                        diag_name = "diagnostics",
+#                        indiv_effect = FALSE,
+#                        plot_post_save_png = FALSE,
+#                        plot_pairs_save_png = FALSE,
+#                        plot_xy_save_png = FALSE)
+#
+# #view the output
+# output_JAGS(jags.1, mix, source, output_options)
