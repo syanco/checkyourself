@@ -18,6 +18,3 @@ makeparameterspace <- function(carbon = T, nitrogen = T, sources){
   interval3 <- 1
   three <- seq(range3[1], range3[2], by = interval3)
 }
-
-
-expand.grid(one, two, three)
