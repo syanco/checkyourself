@@ -41,3 +41,18 @@ formatiso <- function(iso, filename, writefile = T, returnobject = F){
   if(returnobject == T)
     return(dat)
 }
+
+getsamples <-function(source, num_samples){
+  sampled <- list(
+    #pull carbon values
+    sample(source[[1]], size = num_samples),
+    #pull nitrogen values
+    sample(source[[2]], size = num_samples)
+  )
+  return(sampled)
+}
+
+getpreyiso <- function(food, num_samples){
+  preyisos <- lapply(food, getsamples, num_samples=num_samples)
+  return(preyisos)
+}
