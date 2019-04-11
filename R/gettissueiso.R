@@ -19,8 +19,6 @@
 #' tissue.  Tissue values represent the mean isotope values for the prey
 #' consumed between `time` - `window` and `time`.
 #' @export
-#'
-#' @examples
 gettissue <- function(foodlist, window, time){
   relevant <- foodlist[((time-window+1):time)] #separate the relevant window
   #pull out the carbon values
@@ -34,7 +32,6 @@ gettissue <- function(foodlist, window, time){
   isos <- c(carbmean, nitmean)
   return(isos)
 }
-
 
 #' getiso
 #'
@@ -56,8 +53,6 @@ gettissue <- function(foodlist, window, time){
 #' tissue C and N values (in that order) produced from `gettissue`.
 #'
 #' @export
-#'
-#' @examples
 getiso <- function(window, time, food){
   if(window >= time)
     stop("Integration window must be less than time step of analysis")
@@ -83,8 +78,6 @@ getiso <- function(window, time, food){
 #'
 #' @return A .csv written to file and/or a dataframe object.
 #' @export
-#'
-#' @examples
 formatiso <- function(iso, filename, writefile = T, returnobject = F){
   #error checks
   if(!is.character(filename))
@@ -103,17 +96,3 @@ formatiso <- function(iso, filename, writefile = T, returnobject = F){
     return(dat)
 }
 
-getsamples <-function(source, num_samples){
-  sampled <- list(
-    #pull carbon values
-    sample(source[[1]], size = num_samples),
-    #pull nitrogen values
-    sample(source[[2]], size = num_samples)
-  )
-  return(sampled)
-}
-
-getpreyiso <- function(food, num_samples){
-  preyisos <- lapply(food, getsamples, num_samples=num_samples)
-  return(preyisos)
-}

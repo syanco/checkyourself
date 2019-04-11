@@ -7,7 +7,6 @@
 eatfoodonce(num_sources, diet_prop, food)
 }
 \arguments{
-
 \item{num_sources}{integer, the number of food sources to choose from.
 Can not exceed the actual number of available food sources.}
 
@@ -24,5 +23,4 @@ item selected.
 Simulates a single consumption event by a consumer and returns the carbon and
 nitrogen values for the consumed prey.  Meant to be call by `eatfoodsteps`
 and `eatfood`.
-
 }

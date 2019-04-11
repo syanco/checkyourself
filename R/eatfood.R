@@ -13,8 +13,6 @@
 #' @return A vector containing the carbon, then nitrogen values for the prey
 #' item selected.
 #' @export
-#'
-#' @examples
 eatfoodonce <- function(num_sources, diet_prop, food) {
   #check that num_sources doesn't exceed the simulated available sources
   if(num_sources > length(food))
@@ -50,8 +48,6 @@ eatfoodonce <- function(num_sources, diet_prop, food) {
 #' @return A list of consumer-sampled prey isotope values. Each element of the
 #' list is a step containing the C and N values for the prey item sampled.
 #' @export
-#'
-#' @examples
 eatfoodsteps <- function(steps, num_sources, diet_prop, food){
   foodtrack <- replicate(n = steps, eatfoodonce(num_sources = num_sources,
                                                 diet_prop = diet_prop,
@@ -77,8 +73,6 @@ eatfoodsteps <- function(steps, num_sources, diet_prop, food){
 #' @return A list, each element of which represents an individual consumer and
 #'  contains the time step matrix supplied by `eatfoodsteps`.
 #' @export
-#'
-#' @examples
 eatfood <- function(num_individ, steps, num_sources, diet_prop, food) {
   diethistory <- replicate(n = num_individ, eatfoodsteps(steps = steps,
                                                      num_sources = num_sources,

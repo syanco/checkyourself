@@ -35,8 +35,6 @@
 #' prey source estimate files for each value of `sourcesamp`, and a trophic
 #' discrimination factor file all in format that can be used by `MixSIAR`.
 #' @export
-#'
-#' @examples
 iteratesourcesamp <- function (folder, num_sources, popsize, mu_carb, sd_carb,
                                mu_nit, sd_nit, sourcesamp, num_individ, steps,
                                diet_prop, window){

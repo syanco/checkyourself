@@ -21,6 +21,10 @@ default is TRUE. Passed to `savesources`.}
 \item{returnobject}{boolean, whether to return an object within the current
 environment, default is FALSE. Passed to `savesources`.}
 }
+\value{
+Writes a .csv to file containing the sample-based estimates for prey
+source isotop distribution in `MixSIAR` format.
+}
 \description{
 Function to simulate sample-based estimate of prey source isotopic values for
 subsequent mixture decomposition.

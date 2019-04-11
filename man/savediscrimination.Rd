@@ -29,6 +29,5 @@ either writes a MixSIAR formatted csv to file or a dataframe object
 }
 \description{
 function to simulate isotope discrimination data in the format needed by
-
 MixSIAR. Defaults to no discrimination factors.
 }

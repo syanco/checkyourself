@@ -19,8 +19,6 @@
 #' @return A list, each element of which is a vector of isotope vales for each
 #' simulated diet endpoint individual
 #' @export
-#'
-#' @examples
 makefood <- function(num_sources, popsize, mu_carb, sd_carb, mu_nit, sd_nit) {
   #error checks
   if(length(mu_carb) != num_sources)
@@ -57,10 +55,9 @@ makefood <- function(num_sources, popsize, mu_carb, sd_carb, mu_nit, sd_nit) {
 #' @param returnobject boolean, whether to return an object within the current
 #' environment, default is FALSE. Passed to `savesources`.
 #'
-#' @return
+#' @return Writes a .csv to file containing the sample-based estimates for prey
+#' source isotop distribution in `MixSIAR` format.
 #' @export
-#'
-#' @examples
 samplesources <- function(num_samples, food, filename = NULL, writefile = T,
                           returnobject = F){
 
@@ -133,8 +130,6 @@ samplesources <- function(num_samples, food, filename = NULL, writefile = T,
 #'
 #' @return either writes a MixSIAR formatted csv to file or a dataframe object
 #' @export
-#'
-#' @examples
 savesources <- function(food, filename = NULL, mu_carb, sd_carb, mu_nit,
                         sd_nit, popsize, writefile = T, returnobject = F){
 
@@ -173,8 +168,6 @@ savesources <- function(food, filename = NULL, mu_carb, sd_carb, mu_nit,
 #'
 #' @return either writes a MixSIAR formatted csv to file or a dataframe object
 #' @export
-#'
-#' @examples
 savediscrimination <- function(food, filename = NULL, discr_carb = c(0,0,0),
                                discr_nit = c(0,0,0), writefile = T,
                                returnobject = F){
