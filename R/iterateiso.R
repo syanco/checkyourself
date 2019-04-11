@@ -78,5 +78,3 @@ iteratesourcesamp <- function (folder, num_sources, popsize, mu_carb, sd_carb,
   #return wd to previous
   setwd(wd)
 }
-
-

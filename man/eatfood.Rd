@@ -29,4 +29,5 @@ A list, each element of which represents an individual consumer and
 }
 \description{
 Wrapper function to iterate `eatfoodsteps` across multiple individuals.
+
 }
