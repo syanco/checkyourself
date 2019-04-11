@@ -2,7 +2,7 @@
 % Please edit documentation in R/gettissueiso.R
 \name{formatiso}
 \alias{formatiso}
-\title{Title}
+\title{formatiso}
 \usage{
 formatiso(iso, filename, writefile = T, returnobject = F)
 }

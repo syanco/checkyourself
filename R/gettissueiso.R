@@ -66,7 +66,7 @@ getiso <- function(window, time, food){
 }
 
 
-#' Title
+#' formatiso
 #'
 #'Convenience fucntion to format simulated consumer tissue isotope values into
 #'a dataframe with columns for d13C and d15N and each row being an indivdiual

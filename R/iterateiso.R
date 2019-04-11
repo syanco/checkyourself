@@ -1,3 +1,42 @@
+#' iteratesourcesamp
+#'
+#'Function to run entire trophic iso-ecology simulation iterating across sample
+#'sizes for sample-based estimation of prey source isotopic distribution
+#'estimation.  Requires the designation of a folder for all data output. Calls
+#'all necessary functions to run a complete simulation and saves outputs into
+#'format ready for analysis with `MixSIAR`.
+#'
+#' @param folder String, path to folder where simulated data should be saved
+#' @param num_sources integer, number of potential food sources to simulate
+#' @param popsize vector whose length = 'num_sources', each entry of which is
+#' the size of the diet source population to simulate
+#' @param mu_carb vector whose length = 'num_sources', each entry of which is
+#' the mean 13C value of the diet source population to simulate
+#' @param sd_carb vector whose length = 'num_sources', each entry of which is
+#' the standard deviation of the 13C of the diet source population to simulate
+#'#' @param mu_nit vector whose length = 'num_sources', each entry of which is
+#' the mean 15N value of the diet source population to simulate
+#' @param sd_nit vector whose length = 'num_sources', each entry of which is
+#' the standard deviation of the 15N of the diet source population to simulate
+#' @param sourcesamp Vector of sample sizes through which the source sampling
+#' walks
+#' @param num_individ Integer, the number of individuals to simulate
+#' @param steps Integer, the number of time steps to simulate. Passed to
+#' `eatfoodsteps`.
+#' @param diet_prop vector, the relative probability of selecting a source.
+#' Must have an entry for each source. Passed to `eatfoodsteps` and then to
+#' `eatfoodonce`.
+#' @param window Integer, the consumer isotope integration window representing
+#' the number of steps across which prey isotope values are integrated in an
+#' individual consumer to generate consumer tissue isotope values. Window must
+#' be less than or equal to `time`.
+#'
+#' @return Writes simulated consumer mixture distribution file, sample-based
+#' prey source estimate files for each value of `sourcesamp`, and a trophic
+#' discrimination factor file all in format that can be used by `MixSIAR`.
+#' @export
+#'
+#' @examples
 iteratesourcesamp <- function (folder, num_sources, popsize, mu_carb, sd_carb,
                                mu_nit, sd_nit, sourcesamp, num_individ, steps,
                                diet_prop, window){
