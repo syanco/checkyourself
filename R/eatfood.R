@@ -47,8 +47,8 @@ eatfoodonce <- function(num_sources, diet_prop, food) {
 #' Must have an entry for each source. Passed to `eatfoodonce`.
 #' @param food list, the simulated food sources from which to select. Passed to `eatfoodonce`.
 #'
-#' @return A matrix of consumer-sampled prey isotope values. Each step is a
-#' column and each row represents and element (row 1 is C, row 2 is N).
+#' @return A list of consumer-sampled prey isotope values. Each element of the
+#' list is a step containing the C and N values for the prey item sampled.
 #' @export
 #'
 #' @examples

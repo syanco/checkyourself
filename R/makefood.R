@@ -88,7 +88,7 @@ savesources <- function(food, filename = NULL, mu_carb, sd_carb, mu_nit,
 #' savediscrimination
 #'
 #' function to simulate isotope discrimination data in the format needed by
-#' MixSIAR
+#' MixSIAR. Defaults to no discrimination factors.
 #'
 #' @param food list object of simulated food sources
 #' @param filename name of file to save
