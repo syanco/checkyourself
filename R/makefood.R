@@ -40,9 +40,79 @@ makefood <- function(num_sources, popsize, mu_carb, sd_carb, mu_nit, sd_nit) {
                       rnorm(n = popsize[i], mean = mu_nit[i], sd = sd_nit[i]))
     }
   return(food)
+}
+
+
+#' samplesources
+#'
+#'Function to simulate sample-based estimate of prey source isotopic values for
+#'subsequent mixture decomposition.
+#'
+#' @param num_samples Integer, the number of samples to colect from each prey
+#' source
+#' @param food list object of simulated food sources.
+#' @param filename name of file to save. Passed to `savesources`.
+#' @param  writefile boolean, whether to write the csv to file needed by MixSIAR
+#' default is TRUE. Passed to `savesources`.
+#' @param returnobject boolean, whether to return an object within the current
+#' environment, default is FALSE. Passed to `savesources`.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+samplesources <- function(num_samples, food, filename = NULL, writefile = T,
+                          returnobject = F){
+
+  n <- 1:length(food) #get number of sources
+
+  #create a list of sampled prey from each source
+  sampled <- lapply(n, FUN = function(num_sources = n,
+                                                samples = num_samples,
+                                                source = food){
+    replicate(n = samples, c(sample(source[[num_sources]][[1]], size = 1),
+                                 sample(source[[num_sources]][[2]], size = 1)))
+  })
+
+  #get C mean
+  mu_carb <- sapply(n, FUN = function(num_sources = n, source = sampled){
+    mean(source[[num_sources]][1,])
+    })
+
+  #get N mean
+  mu_nit <- sapply(n, FUN = function(num_sources = n, source = sampled){
+    mean(source[[num_sources]][2,])
+  })
+
+  #get C SD
+  sd_carb <- sapply(n, FUN = function(num_sources = n, source = sampled){
+    sd(source[[num_sources]][1,])
+  })
+
+  #get N SD
+  sd_nit <- sapply(n, FUN = function(num_sources = n, source = sampled){
+    sd(source[[num_sources]][2,])
+  })
+
+  out <- savesources(food = food, filename = filename, mu_carb = mu_carb,
+                     sd_carb = sd_carb, mu_nit = mu_nit, sd_nit = sd_nit,
+                     popsize = num_samples, writefile = writefile,
+                     returnobject = returnobject)
+
+  if(returnobject == T){
+    return(out)
   }
+}
 
 #' savesources
+#'
+#'Convenience function to save simulated prey source isotope parameters in
+#'format that can be used by `MixSIAR`.  Can either write the data to a .csv
+#'file and/or return as a dataframe object. Can be called independently if
+#'mean and standard deviation of the prey source isotope distributions are
+#'known (e.g., if simulating that prey source isotope disrtibutions are known
+#'perfectly) or can be called from `samplesources` to save simulated sampling
+#'of prey source isotope values.
 #'
 #' @param food list object of simulated food sources
 #' @param filename name of file to save
