@@ -19,8 +19,11 @@ food <- makefood(3, popsize, mu_carb, sd_carb, mu_nit, sd_nit)
 test <- getpreyiso(food, 3)
 
 #save diet source data to file for import to MixSIAR
-savesources(food, filename = "simulated_sources.csv", mu_carb, sd_carb, mu_nit,
-            sd_nit, popsize)
+# savesources(food, filename = "simulated_sources.csv", mu_carb, sd_carb, mu_nit,
+#             sd_nit, popsize)
+
+#sample and save diet source data to file for import to MixSIAR
+samplesources(5, food = food, filename = "testsource.csv")
 
 #create and save discrimination factor data
 #(NOTE: model only accomodates TDR = 0)

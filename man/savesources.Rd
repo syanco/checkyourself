@@ -36,5 +36,12 @@ environment, default is FALSE}
 either writes a MixSIAR formatted csv to file or a dataframe object
 }
 \description{
-savesources
+
+Convenience function to save simulated prey source isotope parameters in
+format that can be used by `MixSIAR`.  Can either write the data to a .csv
+file and/or return as a dataframe object. Can be called independently if
+mean and standard deviation of the prey source isotope distributions are
+known (e.g., if simulating that prey source isotope disrtibutions are known
+perfectly) or can be called from `samplesources` to save simulated sampling
+of prey source isotope values.
 }
