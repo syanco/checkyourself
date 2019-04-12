@@ -55,13 +55,14 @@ settle.hab <- function(n.individ, p.mat, hab.mat, A.coef, ...){
 #' @param ... Additional arguments as necessary.
 #'
 #' @return Returns a list, each entry of which is the output of `reps` number of
-#' iterations of `settle.hab` (if vecotrized, for a a single parameterization).
+#' iterations of `settle.hab` (if vectorized, for a a single parameterization).
 #' @export
 repHab <- function(p.mat, hab.mat, reps, n.individ, A.coef, ...) {
   sampling.hab <- list()
   for (i in 1:length(A.coef)) {
-    sampling.hab[[i]] <- replicate(n=reps, expr = settle.hab(n.individ = n.individ, p.mat = p.mat[,i], hab.mat = hab.mat[,i],
-                                        A.coef = A.coef[i]))
+    sampling.hab[[i]] <- replicate(n=reps, expr = settle.hab(
+      n.individ = n.individ, p.mat = p.mat[,i], hab.mat = hab.mat[,i],
+      A.coef = A.coef[i]))
   }
   return(sampling.hab)
 }
