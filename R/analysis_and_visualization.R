@@ -44,7 +44,8 @@ compilerangesSDM <- function(nulldata, habdata, condata, A.coef, radius){
   rangedatat <- data.frame("model" = factor(c("Null",
                                               rep("HP Model", length(A.coef)),
                                               rep("CA Model", length(radius))),
-                                            levels = sort(rbind(A.coef, radius))),
+                                            levels = sort(unique(rbind(
+                                              A.coef, radius)))),
                            "parameter" = c(NA, A.coef, radius),
                            "low" = unlist(c(nullRange[1,], habRange[1,],
                                             conRange[1,])),
