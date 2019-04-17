@@ -33,13 +33,13 @@ getrangeSDM <- function(dat, ...) {
 #' @export
 compilerangesSDM <- function(nulldata, habdata, condatat, A.coef, radius){
   #get null range
-  nullRange <- sapply(nulldata, get.range)
+  nullRange <- sapply(nulldata, getrangeSDM)
 
   #get hab pref range
-  habRange <- sapply(habdata, get.range)
+  habRange <- sapply(habdata, getrangeSDM)
 
   #get conspecific attraction range
-  conRange <- sapply(condata, get.range)
+  conRange <- sapply(condata, getrangeSDM)
 
   rangedatat <- data.frame("model" = factor(c("Null",
                                               rep("HP Model", length(A.coef)),
