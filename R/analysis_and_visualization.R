@@ -31,7 +31,7 @@ getrangeSDM <- function(dat, ...) {
 #' @return a dataframe containg the sampling distribution ranges for all
 #' simulation models supplied.
 #' @export
-compilerangesSDM <- function(nulldata, habdata, condatat, A.coef, radius){
+compilerangesSDM <- function(nulldata, habdata, condata, A.coef, radius){
   #get null range
   nullRange <- sapply(nulldata, getrangeSDM)
 
