@@ -137,8 +137,23 @@ pref.strength <- function (A.coef, mat, ...) {
 #' @return A matrix with the values of each cell converted to relative probabilities,
 #'  normalized byt the sum of the values of the matrix
 #' @export
-
 convert.cell <- function (mat,  ...) {
   converted <- mat/sum(mat)
   return(converted)
+}
+
+#' startmat
+#'
+#'Creates a square matirx of supplied size with all cell values being 1.  This
+#'is the matrix anticipated by the habitat growth functions.
+#'
+#' @param matsize integer, the size of a side of the suare matrix to be created.
+#'
+#' @return a square matrix whose sides are of size `matsize` and all cell values
+#'  are "1".
+#'
+#' @export
+startmat <- function(matsize){
+  x <- matrix(1, matsize, matsize)
+  return(x)
 }
