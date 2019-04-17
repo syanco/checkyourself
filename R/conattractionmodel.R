@@ -20,7 +20,10 @@ neighbors <- function (i, radius, mat, ...) {
   nhood <- data.matrix(nhood)
   idx <- t(apply(nhood, 1, function(id, nhood) {id + nhood}, id = id)) #applies the abstract 'nhood' to each occupied cell to get 'mat'-specific cell IDs
   #ensure 'idx' doesn't exceed size of landscape matrix
-  idx <- idx[abs(idx[,1]) <= dim(mat) & abs(idx[,2]) <= dim(mat) & idx[,1] > 0 & idx[,2] > 0,]
+  idx <- idx[abs(idx[,1]) <= dim(mat) &
+               abs(idx[,2]) <= dim(mat) &
+               idx[,1] > 0 &
+               idx[,2] > 0,]
   return(as.numeric(mat[idx]))
 }
 
@@ -52,7 +55,8 @@ settle.con <- function(radius, ID.mat, hab.mat, n.individ, A.coef, ...) {
   locs <- c(rep(NA, n.individ))
   locs[1] <- sample(avail, size = 1)
   for (l in 2:n.individ) {
-    avail <- unlist(sapply(locs[which(locs != is.na(locs))], neighbors, radius = radius, mat = ID.mat))
+    avail <- unlist(sapply(locs[which(locs != is.na(locs))], neighbors,
+                           radius = radius, mat = ID.mat))
     locs[l] <- as.numeric(sample(avail, size = 1))
   }
 
