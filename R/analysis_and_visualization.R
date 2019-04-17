@@ -18,6 +18,32 @@ getrangeSDM <- function(dat, ...) {
   return(list(min, max))
 }
 
+#' getlow
+#'
+#'Convenience function to extract low values from `getrangeSDM` output.
+#'
+#' @param range object output by getrangeSDM
+#'
+#' @return a single value for the low range estimate for a component of the
+#' output of getrangeSDM
+#' @export
+getlow <- function(range){
+  return(range[1])
+}
+
+#' gethigh
+#'
+#'Convenience function to extract high values from `getrangeSDM` output.
+#'
+#' @param range object output by getrangeSDM
+#'
+#' @returna single value for the high range estimate for a component of the
+#' output of getrangeSDM
+#' @export
+gethigh <- function(range){
+  return(range[2])
+}
+
 #' compilerangesSDM
 #'
 #' @param nulldata data object output by `repRand`.
@@ -33,24 +59,24 @@ getrangeSDM <- function(dat, ...) {
 #' @export
 compilerangesSDM <- function(nulldata, habdata, condata, A.coef, radius){
   #get null range
-  nullRange <- sapply(nulldata, getrangeSDM)
+  nullRange <- lapply(nulldata, getrangeSDM)
 
   #get hab pref range
-  habRange <- sapply(habdata, getrangeSDM)
+  habRange <- lapply(habdata, getrangeSDM)
 
   #get conspecific attraction range
-  conRange <- sapply(condata, getrangeSDM)
+  conRange <- lapply(condata, getrangeSDM)
 
   rangedatat <- data.frame("model" = factor(c("Null",
                                               rep("HP Model", length(A.coef)),
-                                              rep("CA Model", length(radius))),
-                                            levels = sort(unique(rbind(
-                                              A.coef, radius)))),
+                                              rep("CA Model", length(radius)))),
                            "parameter" = c(NA, A.coef, radius),
-                           "low" = unlist(c(nullRange[1,], habRange[1,],
-                                            conRange[1,])),
-                           "upp" = unlist(c(nullRange[2,], habRange[2,],
-                                            conRange[2,])))
+                           "low" = c(unlist(sapply(nullRange, getlow)),
+                                     unlist(sapply(habRange, getlow)),
+                                     unlist(sapply(conRange, getlow))),
+                           "upp" = c(unlist(sapply(nullRange, gethigh)),
+                                     unlist(sapply(habRange, gethigh)),
+                                     unlist(sapply(conRange, gethigh))))
 
   return(rangedata)
 }

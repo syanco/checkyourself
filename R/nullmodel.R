@@ -63,5 +63,5 @@ settle.rand<- function(n.individ, hab.mat, A.coef, ...) {
 #' @export
 repRand <- function(reps, n.individ, hab.mat, A.coef, ...) {
   sampling.rand <- replicate(reps, settle.rand(n.individ = n.individ, hab.mat = hab.mat, A.coef = A.coef))
-  return(sampling.rand)
+  return(list(sampling.rand))
 }
