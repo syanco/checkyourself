@@ -24,7 +24,7 @@ allows the function to interpret each cell of the matrix as either "Habitat A" o
 }
 \value{
 Returns a list, each entry of which is the output of `reps` number of
-iterations of `settle.hab` (if vecotrized, for a a single parameterization).
+iterations of `settle.hab` (if vectorized, for a a single parameterization).
 }
 \description{
 Generate sampling distributions from settle.hab vectorized across parameterizations.
