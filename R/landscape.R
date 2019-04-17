@@ -231,5 +231,6 @@ simlandscapes <- function(A.coef, matsize, count.max = 200, n.clusters,
                   size.clusters = size.clusters)
   hab.mat <- sapply(A.coef, pref.strength, mat = y)
   p.mat <- apply(hab.mat, 2, convert.cell)
-  return(list(hab.mat, p.mat))
+  IDmat <- matrix(1:matsize^2, nrow = matsize)
+  return(list(hab.mat, p.mat, IDmat))
 }

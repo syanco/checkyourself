@@ -41,7 +41,10 @@ library(checkyourself)
 
 We can create a set of matrices on which the SDM simulations can run with a call to `simlandscapes` the arguments of which define the nature of the landscape as well as the relative degree of habitat preference to be exhibited uin the habitat preference simulations (this degree of preference is "baked into" the landscape but can be ignored by the null and conspecific attraction models).  
 ```{r}
-lands <- simlandscapes(A.coef = c(1.5, 2, 2.5, 3, 3.5), matsize = 100, 
+#declare parameterizations for habitat preference models (must be done as part 
+#of landscape generation process).
+A.coef <- c(1.5, 2, 2.5, 3, 3.5) 
+lands <- simlandscapes(A.coef = A.coef, matsize = 100, 
                        n.clusters = 50, size.clusters = 100)
 ```
 
@@ -49,17 +52,16 @@ This returns a list, the first element of the list is an array which contains a 
 
 The second element of the list is an array containing the values of each of the five habitat matrices, one for each value of `A.coef` supplied but normalized to a probability of selection. 
 
+The third element of the list is an ID matrix of the correct dimension that is used by th conspecific attraction model to identify landcape locations.
+
 # Run Simulations
 
-We are now ready to simulate the multiple parameterizations of the three models on this simulated landscape.  We first establish the declarations which parameterize the models and determine the number of individual agents included in each model as well as the number of iterations of each model parameterization to run.  We also create an ID matrix (`IDmat`) whose cell values mach the cell IDs which is used to get cell locations for the CA model. Not also that we have already declared the parameterization for the HP Model as part of the landscape generation process.  We print these parameterizations along with the others again for convenience.
+We are now ready to simulate the multiple parameterizations of the three models on this simulated landscape.  We first establish the declarations which parameterize the models and determine the number of individual agents included in each model as well as the number of iterations of each model parameterization to run.  Note that we have already declared the parameterization for the HP Model as part of the landscape generation process (`A.coef`).  
 
 ```{r}
 reps <- 1000 #number of iterations of the simulation
 n.individ <- 100 #number of animals to simulate settling
 radius <- c(1,3,5,10,25) #define settlment radius for conspecific attraction
-
-#create ID matrix with cell values corresponding to cell ID
-IDmat <- matrix(1:dim(y)[1]^2, nrow = dim(y)[1])
 ```
 
 ## Null Model
@@ -82,16 +84,12 @@ HABmod <- repHab(p.mat=lands[[2]], hab.mat = lands[[1]], reps = reps,
 
 ## Conspecific Attraction Model
 
-The CA Model is run with a call to `rep.con`. This model again requires one of the habitat matrices contained in `hab.mat` and the corresponding value from `A.coef` as was the case for the Null Model.  In addition to the `reps` and `n.individ` required by all the models, this function also required the vector of parameterizations for the CA Model contained in `radius`.  Finally, this matrix required that we supply a matrix with cell values corresponding to cell IDs in the argument `ID.mat`.  Here we give the function the `IDmat` we created in our initial declarations.
+The CA Model is run with a call to `rep.con`. This model again requires one of the habitat matrices contained in the first element of `lands` and the corresponding value from `A.coef` as was the case for the Null Model.  In addition to the `reps` and `n.individ` required by all the models, this function also required the vector of parameterizations for the CA Model contained in `radius`.  Finally, this function requires that we supply a matrix with cell values corresponding to cell IDs in the argument `ID.mat`.  Here we give the function this matrix which is contained in th thrid element of `lands` .
 
 ```{r eval=FALSE}
-CAmod <- repCon(reps = reps, radius = radius, ID.mat = IDmat, hab.mat = hab.mat[,1], n.individ = n.individ, A.coef = A.coef[1])
+CAmod <- repCon(reps = reps, radius = radius, ID.mat = lands[[3]], 
+                hab.mat = hab.mat[[1]][,1], n.individ = n.individ, 
+                A.coef = A.coef[1])
 ```
 
-## Save Data
 
-Once these models have finished running we can save the results and other necessary object to an .Rdata file.  For convenience, in addition to the model outputs, we save the parameterizations we used and the matrices on which the model ran (both `p.mat` and `hab.mat`).  This .Rdata file contains all the output needed (and object names) to run the analysis and visualization code included in Supplement 3 of the Yanco et al. manuscript. The code below will generate an .Rdata file in the working directory that is date stamped.
-
-```{r eval=FALSE}
-save(p.mat, hab.mat, A.coef, radius, NULLmod, HABmod, CAmod, file = paste0("sdm_sim_", Sys.Date(), ".Rdata"))
-```
