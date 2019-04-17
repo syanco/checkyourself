@@ -209,3 +209,27 @@ simpatches <- function(matsize, count.max = 200, n.clusters, size.clusters){
   return(y)
 }
 
+#' simlandscapes
+#'
+#' @param A.coef Numeric. Can be a number of vector.  Describes the strength(s)
+#' of preference for Habitat A over Habitat B.
+#' @param matsize integer, the size of a side of the suare matrix to be created.
+#' @param count.max interger, the maximum number of iterations throught the
+#' while-loop.  Default value is 200
+#' @param n.clusters integer, the number of indpendent habitat patches of
+#' "type A" to grow.
+#' @param size.clusters integer, the target average size (in number of matrix
+#' cells) for each patch.
+#'
+#' @return A list each element of which contains the "habitat matrix" and
+#' "preference strength" matrix for the given value of A.coef. There is an
+#' element in the list for each value of A.coef supplied.
+#' @export
+simlandscapes <- function(A.coef, matsize, count.max = 200, n.clusters,
+                         size.clusters){
+  y <- simpatches(matsize=matsize, n.clusters = n.clusters,
+                  size.clusters = size.clusters)
+  hab.mat <- sapply(A.coef, pref.strength, mat = y)
+  p.mat <- apply(hab.mat, 2, convert.cell)
+  return(list(hab.mat, p.mat))
+}
