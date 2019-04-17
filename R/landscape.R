@@ -157,3 +157,55 @@ startmat <- function(matsize){
   x <- matrix(1, matsize, matsize)
   return(x)
 }
+
+#' simpatches
+#'
+#'Function to simulate a patchy habitat matrix by "growing" one habitat type
+#'from a cellular automota-like loop.
+#'
+#' @param matsize integer, the size of a side of the suare matrix to be created.
+#' @param count.max interger, the maximum number of iterations throught the
+#' while-loop.  Default value is 200
+#' @param n.clusters integer, the number of indpendent habitat patches of
+#' "type A" to grow.
+#' @param size.clusters integer, the target average size (in number of matrix
+#' cells) for each patch.
+#'
+#' @return Returns a matrix of size `matsize` x `matsize` containing
+#' approximately `n.clusters` patches of approximately `size.clusters` size.
+#' @export
+simpatches <- function(matsize, count.max = 200, n.clusters, size.clusters){
+  x <- startmat(matsize = matsize) #run startmat to get starting matrix
+  n <- matsize^2 #calc total number of cells
+  cells.left <- 1:n #create 'cells.left' object
+  cells.left[x!=1] <- -1 # Indicates occupancy of cells
+  i <- 0 #i counts clusters created and should start at 0 always
+  indices <- c() #create empty vector for indices
+  ids <- c() #create empty vector for ids
+  max <- count.max
+
+  while(i < n.clusters &&
+        length(cells.left) >= size.clusters &&
+        max > 0) {
+    max <- max-1 #countdown against max number of loops
+    xy <- sample(cells.left[cells.left > 0], 1) #randomly draw an unoccupied cell
+    #run expand function to grow that cluster
+    cluster <- expand(x, size.clusters, xy) #
+    if (!is.na(cluster[1]) && length(cluster)==size.clusters) {
+      i <- i+1 #add to cluster count
+      ids <- c(ids, rep(i, size.clusters)) #add cluster to id list
+      indices <- c(indices, cluster) #add cluster to indices list
+      #remove all cells in the cluster grown from the available list
+      cells.left[indices] <- -1
+    }
+  }
+  y <- matrix(NA, matsize, matsize) #create blank matrix of the same size as `x`.
+
+  #Add the cluster ids to the matrix at locations in indices - this adds each
+  #cluster id to the cells indicated by the
+  #vector 'indices' and leaves the rest of the cells as 'NA'
+  y[indices] <- ids
+
+  return(y)
+}
+
