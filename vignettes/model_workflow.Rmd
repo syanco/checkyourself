@@ -88,7 +88,7 @@ The CA Model is run with a call to `rep.con`. This model again requires one of t
 
 ```{r eval=FALSE}
 CAmod <- repCon(reps = reps, radius = radius, ID.mat = lands[[3]], 
-                hab.mat = hab.mat[[1]][,1], n.individ = n.individ, 
+                hab.mat = lands[[1]][,1], n.individ = n.individ, 
                 A.coef = A.coef[1])
 ```
 
