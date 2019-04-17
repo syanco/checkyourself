@@ -53,3 +53,16 @@ compilerangesSDM <- function(nulldata, habdata, condatat, A.coef, radius){
 
   return(rangedata)
 }
+
+singleheat <- function(data1, data2, param1, param2){
+  #proportion of habitat preference models within the range of conspecific attraction models
+  p.hab.over.con <- matrix(NA, nrow = length(data1), ncol = length(data2))
+  rownames(p.hab.over.con) <- as.factor(param1)
+  colnames(p.hab.over.con) <- as.factor(param2)
+  for (i in 1:length(sampling.mult.hab)) {
+    reduce.hab <- unlist(sampling.mult.hab[[i]][c(FALSE, TRUE)])
+    for (j in 1:length(range.con[1,])) {
+      p.hab.over.con[i,j] <- length(reduce.hab[reduce.hab < range.con[2,j] & reduce.hab > range.con[1,j]]) /length(reduce.hab)
+    }
+  }
+}
