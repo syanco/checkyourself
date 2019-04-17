@@ -18,6 +18,19 @@ getrangeSDM <- function(dat, ...) {
   return(list(min, max))
 }
 
+#' compilerangesSDM
+#'
+#' @param nulldata data object output by `repRand`.
+#' @param habdata data object output by `repHab`.
+#' @param condatat data object output by `repCon`.
+#' @param A.coef numeric, set of habitat preference coefficients supplied to
+#' `repHab`.
+#' @param radius numeric, set of conspecific attraction radii supplied to
+#' `repCon`.
+#'
+#' @return a dataframe containg the sampling distribution ranges for all
+#' simulation models supplied.
+#' @export
 compilerangesSDM <- function(nulldata, habdata, condatat, A.coef, radius){
   #get null range
   nullRange <- sapply(nulldata, get.range)
