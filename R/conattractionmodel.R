@@ -93,5 +93,6 @@ repCon <- function(reps, radius, ID.mat, hab.mat, n.individ, A.coef, ...) {
     sampling.con[[i]] <- replicate(n=reps, settle.con(radius = radius[i], ID.mat = ID.mat, hab.mat = hab.mat,
                                                       n.individ = n.individ, A.coef = A.coef))
   }
+  names(sampling.con) <- as.character(radius)
   return(sampling.con)
 }

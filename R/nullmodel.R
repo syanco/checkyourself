@@ -62,6 +62,9 @@ settle.rand<- function(n.individ, hab.mat, A.coef, ...) {
 #' proportion of those indviduals that settled within "Habitat A".
 #' @export
 repRand <- function(reps, n.individ, hab.mat, A.coef, ...) {
-  sampling.rand <- replicate(reps, settle.rand(n.individ = n.individ, hab.mat = hab.mat, A.coef = A.coef))
-  return(list(sampling.rand))
+  sampling.rand <- list(replicate(reps, settle.rand(n.individ = n.individ,
+                                               hab.mat = hab.mat,
+                                               A.coef = A.coef)))
+  names(sampling.rand) <- "--"
+  return(sampling.rand)
 }

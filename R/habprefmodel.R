@@ -64,5 +64,6 @@ repHab <- function(p.mat, hab.mat, reps, n.individ, A.coef, ...) {
       n.individ = n.individ, p.mat = p.mat[,i], hab.mat = hab.mat[,i],
       A.coef = A.coef[i]))
   }
+  names(sampling.hab) <- as.character(A.coef)
   return(sampling.hab)
 }

@@ -104,7 +104,9 @@ simdat <- compilerangesSDM(nulldata = NULLmod, habdata = HABmod,
 We'll first produce a whiskers plot showing the range of the sampling distributions produced by the simulations arranged by parametrization.  This is a useful plot for estimatingestimating overlap between outcomes, as well as the overall amount of variance produced by each simulation and structures in variance across parameterizations.
 
 ```{r}
-whiskers <- ggplot(data=simdat, aes(xmin = low, xmax = upp, y = parameter)) +
+require(ggplot2)
+whiskers <- ggplot(data=simdat, aes(xmin = low, xmax = upp, 
+                                             y = parameter)) +
   geom_errorbarh() +
   facet_grid(model ~ ., scales = "free_y", space = "free_y") +
   xlab("Proportion Habitat A") +
