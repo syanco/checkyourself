@@ -4,20 +4,20 @@
 \alias{compilerangesSDM}
 \title{compilerangesSDM}
 \usage{
-compilerangesSDM(nulldata, habdata, condatat, A.coef, radius)
+compilerangesSDM(nulldata, habdata, condata, A.coef, radius)
 }
 \arguments{
 \item{nulldata}{data object output by `repRand`.}
 
 \item{habdata}{data object output by `repHab`.}
 
-\item{condatat}{data object output by `repCon`.}
-
 \item{A.coef}{numeric, set of habitat preference coefficients supplied to
 `repHab`.}
 
 \item{radius}{numeric, set of conspecific attraction radii supplied to
 `repCon`.}
+
+\item{condatat}{data object output by `repCon`.}
 }
 \value{
 a dataframe containg the sampling distribution ranges for all
