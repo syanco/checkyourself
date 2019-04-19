@@ -99,8 +99,8 @@ compilerangesSDM <- function(nulldata, habdata, condata, A.coef, radius){
 #' @export
 singleheatmat <- function(data1, data2){
   blankmat <- matrix(NA, nrow = length(data1), ncol = length(data2))
-  # rownames(blankmat) <- as.factor(param1)
-  # colnames(blankmat) <- as.factor(param2)
+  rownames(blankmat) <- as.factor(names(data1))
+  colnames(blankmat) <- as.factor(names(data2))
   range2 <- lapply(data2, getrangeSDM)
   for (i in 1:length(data1)) {
     reduce.dat1 <- unlist(data1[[i]][c(FALSE, TRUE)]) #get just the hab prefs
@@ -113,7 +113,75 @@ singleheatmat <- function(data1, data2){
   return(blankmat)
 }
 
-allheatmat <- function(modellist = list(NULLmod, HABmod, CAmod)){
-  mat <- outer(X = modellist, Y = modellist, FUN = Vectorize(singleheatmat))
-  return(mat)
+#' getcombos
+#'
+#'Creates 2 lists which, paired, provide each unidirectional pairwise
+#'combination (outer product) of the two lists. Meant as a component function to
+#'assist in creating heatmaps.
+#'
+#' @param X The first list of model objects. It is suggested that each list
+#' element be named.
+#' @param Y The second list.
+#'
+#' @return A two element list which contains the paired combinations of the
+#' supplied model lists
+#' @export
+getcombos <- function(X, Y){
+  Y <- rep(Y, rep.int(length(X), length(Y)))
+  if (length(X))
+    X <- rep(X, times = ceiling(length(Y)/length(X)))
+  names(X) <- paste0(names(X),"|",names(Y)) #set names of X to the combo
+  return(list(X,Y))
 }
+
+#' vectorheat
+#'
+#'The vectorized wrapper function for `singleheatmat` that can walk through the
+#'paired list of model combiantions produced by `getcombos` and produce matrices
+#'of overlap data with which heat maps can be generated.
+#'
+#' @param mod1 A list of model objects, each element of which will be the first
+#' data set to compare in the `singleheatmat` function. This function is
+#' intended to recieve the first element of the list produced by `getcombos`.
+#' @param mod2 The second list of model objects, each element of which will be
+#' the second data set to compare in the `singleheatmat` function. This
+#' function is intended to recieve the second element of the list produced by
+#'  `getcombos`.
+#'
+#' @return
+#' @export Rturns a list, each element of which is matrix of the sampling
+#' distribution overlaps as produced by `singleheatmat`.
+#'
+#' @examples modelcomb <- getcombos(X = list("NULL"=NULLmod, "HP"=HABmod,
+#' "CA"=CAmod), Y = list("NULL"=NULLmod, "HP"=HABmod, "CA"=CAmod))
+#'  heats <- vectorheat(modelcomb[[1]], modelcomb[[2]])
+vectorheat <- function(mod1, mod2){
+  heats <- mapply(FUN = singleheatmat, mod1, mod2, SIMPLIFY = F, USE.NAMES = T)
+  return(heats)
+}
+
+#' meltheatmats
+#'
+#'Convenience function to `melt` all the heatmap matirces into a long-form
+#'data.frame format that can be used by `ggplot2`. Retains list naming so that
+#'variables are correctly identified in created data.frames.
+#'
+#' @param mats A list of overlap matrices as is produced by `vectorheat`.
+#'
+#' @return Rturns a list of dataframes in long form, suitable for heat map
+#' plotting via `ggplot2`.
+#'
+#' @export
+meltheatmats <- function(mats){
+  meltedmats <- list()
+  for(i in 1:length(mats)){
+    meltedmats[[i]] <- reshape2::melt(data = mats[[i]],
+                                    varnames = c(sub("\\|.*", "",
+                                                     names(mats[[i]])),
+                                                 sub(".*\\|", "",
+                                                     names(mats[i]))),
+                                    value.name = "overlap", as.is = T)
+  }
+  return(meltedmats)
+}
+

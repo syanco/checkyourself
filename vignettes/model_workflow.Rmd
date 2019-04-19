@@ -84,7 +84,7 @@ HABmod <- repHab(p.mat=lands[[2]], hab.mat = lands[[1]], reps = reps,
 
 ## Conspecific Attraction Model
 
-The CA Model is run with a call to `rep.con`. This model again requires one of the habitat matrices contained in the first element of `lands` and the corresponding value from `A.coef` as was the case for the Null Model.  In addition to the `reps` and `n.individ` required by all the models, this function also required the vector of parameterizations for the CA Model contained in `radius`.  Finally, this function requires that we supply a matrix with cell values corresponding to cell IDs in the argument `ID.mat`.  Here we give the function this matrix which is contained in the third element of `lands` .
+The CA Model is run with a call to `rep.con`. This model again requires one of the habitat matrices contained in the first element of `lands` and the corresponding value from `A.coef` as was the case for the Null Model.  In addition to the `reps` and `n.individ` required by all the models, this function also required the vector of parameterizations for the CA Model contained in `radius`.  Finally, this function requires that we supply a matrix with cell values corresponding to cell IDs in the argument `ID.mat`.  Here we give the function this matrix which is contained in the third element of `lands`.
 
 ```{r eval=FALSE}
 CAmod <- repCon(reps = reps, radius = radius, ID.mat = lands[[3]], 
@@ -101,6 +101,7 @@ simdat <- compilerangesSDM(nulldata = NULLmod, habdata = HABmod,
                            condata= CAmod, A.coef = A.coef, radius = radius)
 ```
 
+##Whisker Plot of Sampling Distribution Ranges
 We'll first produce a whiskers plot showing the range of the sampling distributions produced by the simulations arranged by parametrization.  This is a useful plot for estimatingestimating overlap between outcomes, as well as the overall amount of variance produced by each simulation and structures in variance across parameterizations.
 
 ```{r}
@@ -119,10 +120,31 @@ whiskers <- ggplot(data=simdat, aes(xmin = low, xmax = upp,
         panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 whiskers
 ```
-
-Next we can produce a heat map showing the showing the proportion of overlap between model-parameterization combinations (1 represents complete overlap, 0 represents no overlap). Panels clockwise from top-left: (Null∩CA)/Null shows the proportion of null model simulations that overlapped the range of conspecific attraction models for each parameterization; (CA∩HP)/CA shows the proportion of conspecific attraction model simulations that overlapped the range of habitat preference models for each parameterization; (CA∩Null)/CA shows the proportion of conspecific attraction model simulations that overlapped the range of null models for each parameterization; (HP∩Null)/HP shows the proportion of habitat preference model simulations that overlapped the range of null models for each parameterization; (HP∩CA)/HP shows the proportion of habitat preference model simulations that overlapped the range of conspecific attraction models for each parameterization; and, (Null∩HP)/Null shows the proportion of null model simulations that overlapped the range of habitat preference models for each parameterization. 
+##Heat Map of Sampling Distribution Overlap
+Next we can produce a heat map showing the showing the proportion of overlap between model-parameterization combinations (1 represents complete overlap, 0 represents no overlap).  In order to compare sampling distributions to each other to search for degenerate relationships, we calculate the unidirectional pairwise overlap between all sampling distributions. Each overlap was unidirectional since different model parameterizations produced unequal variances. Thus, the overlap between any two sampling distributions may be (and is in this case) asymmetric. We combined all unidirectional pairwise comparisons into matrices of overlap between each combination of models (each matix including all the simulated parameterizations).
 
 ```{r}
-
+modelcomb <- getcombos(X = list("NULL"=NULLmod, "HP"=HABmod, "CA"=CAmod),
+                       Y = list("NULL"=NULLmod, "HP"=HABmod, "CA"=CAmod))
+heats <- vectorheat(modelcomb[[1]], modelcomb[[2]])
+heatsmelt <- meltheatmats(heats) #change data structure to comport with ggplot
 ```
 
+```{r}
+#make the component plots
+p1 <- ggplot(heatsmelt[[2]], aes(x = 1, y = as.factor(radius))) +
+  geom_tile(aes(fill = overlap), color="black", size = 0.25) +
+  coord_equal() +
+  geom_text(aes(label = overlap), size = 2) +
+  scale_fill_gradient2(low="white", high="olivedrab", limits=c(0,1), guide = F) +
+  xlab("Null") +
+  ylab("CA Radius") +
+  ggtitle("p(CA|Null)") +
+  theme(axis.text.x = element_text(color="white"), axis.title = element_text(size=8), axis.ticks = element_blank(),
+        plot.margin = margin(t = 0, r = 0, b = 0.2, l = 0, unit = "in"),
+        plot.title = element_text(size = 11, face = "bold", hjust = 0.5), panel.border = element_blank(),
+        panel.background = element_blank())
+```
+
+
+Panels clockwise from top-left: (Null∩CA)/Null shows the proportion of null model simulations that overlapped the range of conspecific attraction models for each parameterization; (CA∩HP)/CA shows the proportion of conspecific attraction model simulations that overlapped the range of habitat preference models for each parameterization; (CA∩Null)/CA shows the proportion of conspecific attraction model simulations that overlapped the range of null models for each parameterization; (HP∩Null)/HP shows the proportion of habitat preference model simulations that overlapped the range of null models for each parameterization; (HP∩CA)/HP shows the proportion of habitat preference model simulations that overlapped the range of conspecific attraction models for each parameterization; and, (Null∩HP)/Null shows the proportion of null model simulations that overlapped the range of habitat preference models for each parameterization. 
