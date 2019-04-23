@@ -126,6 +126,7 @@ singleheatmat <- function(data1, data2){
 #'
 #' @return A two element list which contains the paired combinations of the
 #' supplied model lists
+#'
 #' @export
 getcombos <- function(X, Y){
   Y <- rep(Y, rep.int(length(X), length(Y)))
@@ -149,9 +150,9 @@ getcombos <- function(X, Y){
 #' function is intended to recieve the second element of the list produced by
 #'  `getcombos`.
 #'
-#' @return
-#' @export Rturns a list, each element of which is matrix of the sampling
+#' @return Returns a list, each element of which is matrix of the sampling
 #' distribution overlaps as produced by `singleheatmat`.
+#' @export
 #'
 #' @examples modelcomb <- getcombos(X = list("NULL"=NULLmod, "HP"=HABmod,
 #' "CA"=CAmod), Y = list("NULL"=NULLmod, "HP"=HABmod, "CA"=CAmod))
