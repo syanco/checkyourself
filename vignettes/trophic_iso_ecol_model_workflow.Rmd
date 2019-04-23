@@ -1,0 +1,38 @@
+---
+title: "trophic_iso_ecol_workflow"
+author: "Scott Yanco"
+date: "April 22, 2019"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{checkyourself}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Questions about this vignette or the `chekyourself` package should be directed to Scott Yanco at: Scott.Yanco@ucdenver.edu  
+
+# Introduction
+This vignette demonstrates how the `checkyourself` package can be used to simulate a simple agent-based model of consumer diet mixing.  Specifically, we simulate the process of trying to recover diet composition of a consumer via stable isotope analysis.  Diet end points' isotopic composition is "measured" from a smaple of varying sizes from each simulated potential prey population.  We explore the effect that estimation uncertaintly (with respect to diet end source isotopic composition) has on our ability to correctly parse the diet components from the consumer isotope mixture distribution.
+
+We first set up the set of declarations necessary to run the simulation model. In this construct we will simulate three potential prey populations of 10,000 individuals each. Each has a unique mean $\delta^{13}C$ and $\delta^{15}N$; all populations have equal isotopic variances (1). We supply a "true" proportion of total diet contributed by each potential source population which is the response variable we are ultmiately trying to correctly recover. We simulate a population of 25 consumers consuming prey 100 times each.
+
+```{r}
+library(checkyourself)
+num_sources <- 3 #number of diet endpoints to simulate
+popsize <- c(10000,10000,10000) #size of each diet source pop to simulate
+mu_carb <- c(-1, -10, -30) #vector of "true" mean carbon values for each source
+sd_carb <- c(1,1,1) #vector of "true" carbon source standard deviations
+mu_nit <- c(10,6,11) #vector of "true" mean nitrogen values for each source
+sd_nit <-c(1,1,1) #vector of "true" nitrogen source standard deviations
+diet_prop <- c(.1, .25, .65) #"true" proportional diet composition
+steps <- 100 #number of steps per model run
+num_individ <- 25 #number of consumers to simulate
+```
+

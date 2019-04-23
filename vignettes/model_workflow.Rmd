@@ -59,7 +59,7 @@ The third element of the list is an ID matrix of the correct dimension that is u
 We are now ready to simulate the multiple parameterizations of the three models on this simulated landscape.  We first establish the declarations which parameterize the models and determine the number of individual agents included in each model as well as the number of iterations of each model parameterization to run.  Note that we have already declared the parameterization for the HP Model as part of the landscape generation process (`A.coef`).  
 
 ```{r}
-reps <- 2 #number of iterations of the simulation
+reps <- 100 #number of iterations of the simulation
 n.individ <- 100 #number of animals to simulate settling
 radius <- c(1,3,5,10,25) #define settlment radius for conspecific attraction
 ```
@@ -68,7 +68,7 @@ radius <- c(1,3,5,10,25) #define settlment radius for conspecific attraction
 
 The Null Model can be run with a single call to `rep.rand`.  We supply `rep.rand` with several of the parameterizations from above.  We also need to supply the function with one of the habitat matrices in in the object `lands` as well as the corresponding `A.coef`.  While the simulation itself does not utilize this habitat matrix, because part of the output reports the proportion of settled location within Habitat A one of the habitat matrices is required.  It does not matter which one since they are identical in their spatial geometry and the magnitude of the preference encoded is not considered. The only requirement is that the habitat matrix supplied must match the value of `A.coef` supplied, since that value serves as the "key" to which cells are part of Habitat A.  Remember that the habitat matrices are stored in the second dimension of the habitat array, which is, itself, the first element of the list `lands`. Below we simply use the first habitat matrix and the first value of `A.coef`.
 
-```{r eval=FALSE}
+```{r}
 NULLmod <- repRand(reps=reps, n.individ = n.individ, hab.mat = lands[[1]][,1], 
                    A.coef = A.coef[1])
 ```
@@ -77,7 +77,7 @@ NULLmod <- repRand(reps=reps, n.individ = n.individ, hab.mat = lands[[1]][,1],
 
 The HP Model is run by a call to `rep.hab`. This function takes all the same arguments as `rep.rand` plus the probability matrices contained in the second element of `lands`.  Note that for this model we must supply all the habitat matrices and values of `A.coef` so that the model can iterate through each parameterization.
 
-```{r eval=FALSE}
+```{r}
 HABmod <- repHab(p.mat=lands[[2]], hab.mat = lands[[1]], reps = reps, 
                  n.individ = n.individ, A.coef = A.coef)
 ```
@@ -86,7 +86,7 @@ HABmod <- repHab(p.mat=lands[[2]], hab.mat = lands[[1]], reps = reps,
 
 The CA Model is run with a call to `rep.con`. This model again requires one of the habitat matrices contained in the first element of `lands` and the corresponding value from `A.coef` as was the case for the Null Model.  In addition to the `reps` and `n.individ` required by all the models, this function also required the vector of parameterizations for the CA Model contained in `radius`.  Finally, this function requires that we supply a matrix with cell values corresponding to cell IDs in the argument `ID.mat`.  Here we give the function this matrix which is contained in the third element of `lands`.
 
-```{r eval=FALSE}
+```{r}
 CAmod <- repCon(reps = reps, radius = radius, ID.mat = lands[[3]], 
                 hab.mat = lands[[1]][,1], n.individ = n.individ, 
                 A.coef = A.coef[1])
@@ -105,7 +105,7 @@ simdat <- compilerangesSDM(nulldata = NULLmod, habdata = HABmod,
 We'll first produce a whiskers plot showing the range of the sampling distributions produced by the simulations arranged by parametrization.  This is a useful plot for estimatingestimating overlap between outcomes, as well as the overall amount of variance produced by each simulation and structures in variance across parameterizations.
 
 ```{r}
-require(ggplot2)
+library(ggplot2)
 whiskers <- ggplot(data=simdat, aes(xmin = low, xmax = upp, 
                                              y = parameter)) +
   geom_errorbarh() +
@@ -121,30 +121,118 @@ whiskers <- ggplot(data=simdat, aes(xmin = low, xmax = upp,
 whiskers
 ```
 ##Heat Map of Sampling Distribution Overlap
-Next we can produce a heat map showing the showing the proportion of overlap between model-parameterization combinations (1 represents complete overlap, 0 represents no overlap).  In order to compare sampling distributions to each other to search for degenerate relationships, we calculate the unidirectional pairwise overlap between all sampling distributions. Each overlap was unidirectional since different model parameterizations produced unequal variances. Thus, the overlap between any two sampling distributions may be (and is in this case) asymmetric. We combined all unidirectional pairwise comparisons into matrices of overlap between each combination of models (each matix including all the simulated parameterizations).
+Next we can produce a heat map showing the showing the proportion of overlap between model-parameterization combinations (1 represents complete overlap, 0 represents no overlap).  In order to compare sampling distributions to each other to search for degenerate relationships, we calculate the unidirectional pairwise overlap between all sampling distributions. Each overlap was unidirectional since different model parameterizations produced unequal variances. Thus, the overlap between any two sampling distributions may be (and *is* in this case) asymmetric. We combined all unidirectional pairwise comparisons into matrices of overlap between each combination of models (each matix including all the simulated parameterizations). We then rearrange the data into long format so that we can subsequently call graphing functions from `ggplot2`.
 
 ```{r}
-modelcomb <- getcombos(X = list("NULL"=NULLmod, "HP"=HABmod, "CA"=CAmod),
-                       Y = list("NULL"=NULLmod, "HP"=HABmod, "CA"=CAmod))
+#get the pairwise unidirectional combinations
+modelcomb <- getcombos(X = list("RAND"=NULLmod, "HP"=HABmod, "CA"=CAmod),
+                       Y = list("RAND"=NULLmod, "HP"=HABmod, "CA"=CAmod))
+#produce overlap matrices for each combination
 heats <- vectorheat(modelcomb[[1]], modelcomb[[2]])
-heatsmelt <- meltheatmats(heats) #change data structure to comport with ggplot
+#change data structure to comport with ggplot
+heatsmelt <- meltheatmats(heats) 
 ```
+
+Now we have the overlap calculations such that we can visualize the degree of overlap in resultant sampling distributions for each unidirectional pairwaise model combination (and for each parameterization of those models) 
+```{r}
+#create the component plots
+heatmaplist <- plotheatvector(heatsmelt)
+#remove the plots that compare a model with itself
+heatmaplist <- heatmaplist[!sapply(heatmaplist, is.null)]
+#arrange the plots on a grid and display
+gridExtra::grid.arrange(grobs = heatmaplist, 
+                        #layout matrix puts the plots in a clearer order
+                        layout_matrix = rbind(c(1,6,2), c(3,4,5)))
+```
+Panels clockwise from top-left: p(HP|RAND) shows the proportion of habitat preference model simulations that overlapped the range of null models for each parameterization; p(HP|CA) shows the proportion of habitat preference model simulations that overlapped the range of conspecific attraction models for each parameterization; p(CA|RAND) shows the proportion of conspecific attraction model simulations that overlapped the range of null models for each parameterization; p(RAND|CA) shows the proportion of null model simulations that overlapped the range of conspecific attraction models for each parameterization;p(CA|HP)shows the proportion of conspecific attraction model simulations that overlapped the range of habitat preference models for each parameterization; p(RAND|HP) shows the proportion of null model simulations that overlapped the range of habitat preference models for each parameterization. 
+
+#Interpretation
+
+##Noisy Hypotheses
+
+In order to examine the variances produced by each model, compare variances between models, and examine how variance relates to parameterization, we calculated the range for each sampling distribution produced by the 11 model-parameterization combinations. We plotted these together to visually assess model-generated variances relative to other model-parameterizations and to assess parameter related structure between models.
+
+In this example we can see several interesting patterns that a researcher engaged in this analysis could pursue. The strongest conspecific attraction models (lowest values of radius) produce high variances, likely due to the strong effect of the first individual to settle in the patchy landscape. As conspecific attraction gets weaker the values and variance become comparable to the null model. There is also clear structure in the values estimated by the habitat preference models: we observed a higher proportion of “Habitat A” selected by models with stronger habitat preference, as would be expected. Variance was relatively constant between models suggesting that parameter estimation under this hypothesis would be similarly accurate regardless of the magnitude of the parameter estimate itself.
+
+Note that the range is not the only way the variance could be explored; 95% highest density intervals, variance, standard deviation (for normal distributions), or interquartile range are all suitable methods for exploring the variance generated by a model. The choice of metric for examining spread in the simulated sampling distributions should be made by the researcher taking into account the nature of planned inferential methods, biological relevance of each measurement, and distributional assumptions about the expected response variable(s).
+
+Whether a hypothesis is “too noisy” is subject to the judgement of the researcher and the goals of the study. For example, a study aimed at estimating some parameter should consider whether the predicted uncertainty around that estimate (measured from the simulated sampling distributions of that parameter) is sufficient for the study’s aims. Researchers may also use these analyses to consider the modality and distributional form of the simulated sampling distribution.
+
+##Hypothesis Degeneration
+
+In order to compare sampling distributions to each other to search for degenerate relationships, we calculated the unidirectional pairwise overlap between all sampling distributions. Each overlap was unidirectional since different model parameterizations produced unequal variances. Thus, the overlap between any two sampling distributions was asymmetric. We combined all unidirectional pairwise comparisons into heatmaps to assess patterns of overlap in parameter combinations.
+
+We observed clear structures in the degeneracy of certain model-parameterization combinations. For example, the proportion of habitat preferences models overlapped by conspecific attraction models was very high for models with low strength of preference and/or strong conspecific attraction (small radius). Coversely, the proportion of conspecific attraction models that overlapped habitat preference models was generally low except for models with very strong habitat preference and strong conspecific attraction. It is important to note here that because of the unequal variances these patterns are not the inverse of each other.
+
+Ultimately, as with noisy hypotheses, determining if sampling distributions overlap “too much” is up to the judgement of the researcher within the context of the study’s aims. Each unidirectional pairwise proportion of overlap represents the conditional probability of one hypothesis generating response data capable of being produced by another hypothesis. For example, the overlap described by p(HP|Null) is the probability of the habitat preference hypothesis producing convergent results given the null hypothesis. Note that this does not represent the overall probability of mis-specifying a hypothesis as any other because each overlap statement is a probability conditioned on the assumption of a particular model.
+
+##Revising Hypotheses
+Given both the large variance generated for the null model and the high amount of overlap in sampling distributions between several model-parameterization combinations, it’s reasonable to assume that a researcher in this situation would seek to refine their proposed study. There are myriad options for such revision and in a “real world” examination this would rest on the judgement and system-specific knowledge of the researcher as well as the specific aims of the study. We offer a few potential revisions here to illustrate the types of changes that could be made but in no way suggest that these revisions are exhaustive or appropriate to the system. 
+
+By including some spatial measures as part of the observed response pattern, models that converged when considering only proportion of habitat selected may now be parsed. In many instances, the various model-parameterization combinations produced differentiable spatial patterns. For example, many of the models that hypothesized conspecific attraction exhibited strong spatial clustering, likely resulting from the strong influence of the initial settled location (sort of a spatial founder effect).
 
 ```{r}
-#make the component plots
-p1 <- ggplot(heatsmelt[[2]], aes(x = 1, y = as.factor(radius))) +
-  geom_tile(aes(fill = overlap), color="black", size = 0.25) +
+base <- factor(lands[[1]][,3], levels = c("2.5", "1"))
+land <- raster::raster(matrix(lands[[1]][,3], nrow = sqrt(length(lands[[1]][,3])), 
+                      byrow = T)) #create a raster from one of tha hab.mats
+raster::extent(land) <- c(1, 100, 1, 100) #set the extent to match cell-based numbering
+
+#get coords of  conspecific attraction distribution
+cells.con <- unlist(CAmod[[1]][1]) #get cell values from a single model iteration
+mat <- matrix(1:length(lands[[1]][,3]), nrow = sqrt(length(lands[[1]][,3]))) #create matrix from which to draw coordinates
+coords.con <- arrayInd(mat[cells.con], .dim = dim(mat)) #convert cell values into coordinates
+colnames(coords.con) <- c("x_coord", "y_coord") #set column names
+
+
+#plot underlying habitat with example of habitat preference distribution
+cells.hab <- unlist(HABmod[[1]][1]) #get cell values from a single model iteration
+coords.hab <- arrayInd(mat[cells.hab], .dim = dim(mat)) #convert cell values into coordinates
+colnames(coords.hab) <- c("x_coord", "y_coord") #set column names
+
+library(rasterVis)
+
+map1 <- gplot(land) +
+  geom_raster(aes(fill = factor(value))) +
   coord_equal() +
-  geom_text(aes(label = overlap), size = 2) +
-  scale_fill_gradient2(low="white", high="olivedrab", limits=c(0,1), guide = F) +
-  xlab("Null") +
-  ylab("CA Radius") +
-  ggtitle("p(CA|Null)") +
-  theme(axis.text.x = element_text(color="white"), axis.title = element_text(size=8), axis.ticks = element_blank(),
-        plot.margin = margin(t = 0, r = 0, b = 0.2, l = 0, unit = "in"),
-        plot.title = element_text(size = 11, face = "bold", hjust = 0.5), panel.border = element_blank(),
-        panel.background = element_blank())
+  scale_fill_manual(values = c("#41AB5D", "#FFEDA0"), labels = c("B", "A")) +
+  geom_point(data = as.data.frame(coords.con), aes(x = x_coord, y = y_coord), fill = "#2B8CBE",
+             size = 1.5, shape = 21, color = "black", stroke = 1)+
+  guides(fill=F) +
+  ggtitle("CA Model (Radius = 3)") +
+  theme(axis.ticks = element_blank(), axis.text = element_blank(), axis.title = element_blank(),
+        plot.margin = margin(t = .2, r = 0, b = 0.0, l = 0, unit = "in"),
+        plot.title = element_text(size = 11, face = "bold", hjust = 0.5),
+        panel.background = element_rect(fill= "white", color = "black"),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+
+map2 <- gplot(land) +
+  geom_raster(aes(fill = factor(value))) +
+  coord_equal() +
+  scale_fill_manual(values = c("#41AB5D", "#FFEDA0"), labels = c("B", "A")) +
+  geom_point(data = as.data.frame(coords.hab), aes(x = x_coord, y = y_coord), fill = "#2B8CBE",
+             size = 1.5, shape = 21, color = "black", stroke = 1)+
+  guides(fill=guide_legend(title="Habitat Type", reverse = T, direction = "horizontal")) +
+  ggtitle("HP Model (Pref. Strength = 2)") +
+  theme(axis.ticks = element_blank(), axis.text = element_blank(), axis.title = element_blank(),
+        plot.margin = margin(t = .2, r = 0, b = 0.0, l = 0, unit = "in"),
+        plot.title = element_text(size = 11, face = "bold", hjust = 0.5),
+        panel.background = element_rect(fill= "white", color = "black"),
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+
+g_legend<-function(a.gplot){
+  tmp <- ggplot_gtable(ggplot_build(a.gplot))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)}
+
+mylegend<-g_legend(map2)
+
+#make and save object for combined plots
+gridExtra::grid.arrange(gridExtra::arrangeGrob(map1, map2 + theme(legend.position="none"), nrow = 1, padding = 0),
+                                 mylegend, nrow=2, heights = c(3,1), padding = 0)
 ```
 
+Manipulative experimentation might also help to parse the convergent hypotheses. Decoy experiments have been used previously both a management tool for recolonization efforts and a test of conspecific attraction (Kress 1983, Kotliar and Burger 1984, Ward et al. 2011). Similarly, habitat manipulation could also be used to parse convergent hypotheses (e.g., Cruz-Angón et al. 2008).
 
-Panels clockwise from top-left: (Null∩CA)/Null shows the proportion of null model simulations that overlapped the range of conspecific attraction models for each parameterization; (CA∩HP)/CA shows the proportion of conspecific attraction model simulations that overlapped the range of habitat preference models for each parameterization; (CA∩Null)/CA shows the proportion of conspecific attraction model simulations that overlapped the range of null models for each parameterization; (HP∩Null)/HP shows the proportion of habitat preference model simulations that overlapped the range of null models for each parameterization; (HP∩CA)/HP shows the proportion of habitat preference model simulations that overlapped the range of conspecific attraction models for each parameterization; and, (Null∩HP)/Null shows the proportion of null model simulations that overlapped the range of habitat preference models for each parameterization. 
+Addressing the model-parameterization combinations that are producing very high levels of variance might not be so easily accomplished through variable refinement or manipulative experimentation. Because the simulation model assumes observation error, additional processes or poorly constrained processes are the likely culprits. Indeed, in reconsidering the conspecific attraction model we can see that the resulting spatial distribution is a combination of two separate processes: 1) the initial individual settles randomly; and 2) subsequent individuals settle based on the conspecific attraction decisions rules. In this case, it’s plausible that strong conspecific attraction combined with a random starting location is an example of increasing returns (Arthur 1989) for each model run but results in a near uniform distribution
+

@@ -95,7 +95,8 @@ compilerangesSDM <- function(nulldata, habdata, condata, A.coef, radius){
 #' @param param2 The numeric parameter object originally fed to the simulation
 #' model that generated data set 2.
 #'
-#' @return
+#' @return Returns a matirx or vector (depending on number of paraeters) of
+#'  proportion of `data1` contained in `data2`
 #' @export
 singleheatmat <- function(data1, data2){
   blankmat <- matrix(NA, nrow = length(data1), ncol = length(data2))
@@ -176,12 +177,83 @@ meltheatmats <- function(mats){
   meltedmats <- list()
   for(i in 1:length(mats)){
     meltedmats[[i]] <- reshape2::melt(data = mats[[i]],
-                                    varnames = c(sub("\\|.*", "",
-                                                     names(mats[[i]])),
-                                                 sub(".*\\|", "",
-                                                     names(mats[i]))),
-                                    value.name = "overlap", as.is = T)
+                                      varnames = c(
+                                        sub('\\|.*','',
+                                            names(mats[i])),
+                                        sub('.*\\|','',
+                                            names(mats[i]))),
+                                      value.name = "overlap", as.is = T)
+    meltedmats[[i]][,1] <- factor(meltedmats[[i]][,1])
+    meltedmats[[i]][,2] <- factor(meltedmats[[i]][,2])
   }
   return(meltedmats)
+}
+
+
+length(levels(heatsmelt[[2]][,1]))
+length(levels(heatsmelt[[2]][,2]))
+
+#' plotsingleheat
+#'
+#'Function to creat a `ggplot2` heatmap from a single  "melted" matrix of
+#'sampling distribution overlap. Intended to be called by vectorized wrapper function, but could be called on a single element of the list produced by
+#'`meltheatmats` to produce a sinlge heatmap
+#'
+#' @param data
+#'
+#' @return
+#' @export
+#'
+#' @examples
+plotsingleheat <- function(data){
+  if(names(data)[1] != names(data)[2]){
+    if(length(levels(data[,1])) < length(levels(data[,2]))){
+      ggplot(data, aes_string(x = names(data)[1],
+                              y = names(data)[2])) +
+        geom_tile(aes_string(fill = names(data)[3]), color="black", size = 0.25) +
+        coord_equal() +
+        geom_text(aes_string(label = names(data)[3]), size = 2) +
+        scale_fill_gradient2(low="white", high="olivedrab", limits=c(0,1),
+                             guide = F) +
+        xlab(as.character(names(data)[1])) +
+        ylab(as.character(names(data)[2])) +
+        ggtitle(paste0("p(", as.character(names(data)[1]), "|",
+                       as.character(names(data)[2]), ")")) +
+        theme(#axis.text.x = element_text(color="white"),
+              axis.title = element_text(size=8),
+              axis.ticks = element_blank(),
+              plot.margin = margin(t = 0, r = 0, b = 0.2, l = 0, unit = "in"),
+              plot.title = element_text(size = 11, face = "bold", hjust = 0.5),
+              panel.border = element_blank(),
+              panel.background = element_blank())
+    } else {
+      ggplot(data, aes_string(x = names(data)[2],
+                              y = names(data)[1])) +
+        geom_tile(aes_string(fill = names(data)[3]), color="black", size = 0.25) +
+        coord_equal() +
+        geom_text(aes_string(label = names(data)[3]), size = 2) +
+        scale_fill_gradient2(low="white", high="olivedrab", limits=c(0,1),
+                             guide = F) +
+        xlab(as.character(names(data)[2])) +
+        ylab(as.character(names(data)[1])) +
+        ggtitle(paste0("p(", as.character(names(data)[1]), "|",
+                       as.character(names(data)[2]), ")")) +
+        theme(#axis.text.x = element_text(color="white"),
+              axis.title = element_text(size=8),
+              axis.ticks = element_blank(),
+              plot.margin = margin(t = 0, r = 0, b = 0.2, l = 0, unit = "in"),
+              plot.title = element_text(size = 11, face = "bold", hjust = 0.5),
+              panel.border = element_blank(),
+              panel.background = element_blank())
+    }
+  }
+}
+
+str(heatsmelt[[1]])
+plotsingleheat(heatsmelt[[6]])
+
+plotheatvector <- function(meltlist){
+  maps <- lapply(meltlist, FUN = plotsingleheat)
+  return(maps)
 }
 

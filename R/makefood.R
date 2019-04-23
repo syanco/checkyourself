@@ -101,6 +101,29 @@ samplesources <- function(num_samples, food, filename = NULL, writefile = T,
   }
 }
 
+#' samplesourcesvector
+#'
+#' Function to simulate sampling of potential diet source populations across a
+#' set of values for the size of the sample.  Largely a convenience function to
+#' run `samplesources` across multiple values of sample size.
+#'
+#' @param n_vec numeric, vector of sample sizes for sampling from diet sources.
+#' @param food list object of simulated food sources.
+#' @param filename name of file to save. Passed to `savesources`.
+#' @param  writefile boolean, whether to write the csv to file needed by MixSIAR
+#' default is TRUE. Passed to `savesources`.
+#' @param returnobject boolean, whether to return an object within the current
+#' environment, default is FALSE. Passed to `savesources`
+#'
+#' @return Saves diest source sampled isotope distributions to files of format
+#' used by `MixSIAR`
+#' @export
+samplesourcesvector <- function(n_vec, food, filename = NULL, writefile = T,
+                                returnobject = F){
+  sapply(n_vec, samplesources, food = food, filename = filename,
+         writefile = writefile, returnobject = returnobject)
+}
+
 #' savesources
 #'
 #'Convenience function to save simulated prey source isotope parameters in
