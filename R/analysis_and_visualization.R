@@ -189,10 +189,6 @@ meltheatmats <- function(mats){
   return(meltedmats)
 }
 
-
-length(levels(heatsmelt[[2]][,1]))
-length(levels(heatsmelt[[2]][,2]))
-
 #' plotsingleheat
 #'
 #'Function to creat a `ggplot2` heatmap from a single  "melted" matrix of
@@ -249,8 +245,6 @@ plotsingleheat <- function(data){
   }
 }
 
-str(heatsmelt[[1]])
-plotsingleheat(heatsmelt[[6]])
 
 plotheatvector <- function(meltlist){
   maps <- lapply(meltlist, FUN = plotsingleheat)

@@ -19,6 +19,10 @@ model that generated data set 1.}
 \item{param2}{The numeric parameter object originally fed to the simulation
 model that generated data set 2.}
 }
+\value{
+Returns a matirx or vector (depending on number of paraeters) of
+ proportion of `data1` contained in `data2`
+}
 \description{
 Function to calculate matrix of overlap between one distribution and the
 range of another. Builds the matrix upon which a heatmap can act.
