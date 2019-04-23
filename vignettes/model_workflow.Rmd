@@ -59,7 +59,7 @@ The third element of the list is an ID matrix of the correct dimension that is u
 We are now ready to simulate the multiple parameterizations of the three models on this simulated landscape.  We first establish the declarations which parameterize the models and determine the number of individual agents included in each model as well as the number of iterations of each model parameterization to run.  Note that we have already declared the parameterization for the HP Model as part of the landscape generation process (`A.coef`).  
 
 ```{r}
-reps <- 100 #number of iterations of the simulation
+reps <- 2 #number of iterations of the simulation
 n.individ <- 100 #number of animals to simulate settling
 radius <- c(1,3,5,10,25) #define settlment radius for conspecific attraction
 ```
