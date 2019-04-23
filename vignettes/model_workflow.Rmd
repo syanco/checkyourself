@@ -12,7 +12,8 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.align='center'
 )
 ```
 
@@ -40,6 +41,7 @@ library(checkyourself)
 ```
 
 We can create a set of matrices on which the SDM simulations can run with a call to `simlandscapes` the arguments of which define the nature of the landscape as well as the relative degree of habitat preference to be exhibited in the habitat preference simulations (this degree of preference is "baked into" the landscape but can be ignored by the null and conspecific attraction models).  
+
 ```{r}
 #declare parameterizations for habitat preference models (must be done as part 
 #of landscape generation process).
@@ -59,7 +61,7 @@ The third element of the list is an ID matrix of the correct dimension that is u
 We are now ready to simulate the multiple parameterizations of the three models on this simulated landscape.  We first establish the declarations which parameterize the models and determine the number of individual agents included in each model as well as the number of iterations of each model parameterization to run.  Note that we have already declared the parameterization for the HP Model as part of the landscape generation process (`A.coef`).  
 
 ```{r}
-reps <- 2 #number of iterations of the simulation
+reps <- 100 #number of iterations of the simulation
 n.individ <- 100 #number of animals to simulate settling
 radius <- c(1,3,5,10,25) #define settlment radius for conspecific attraction
 ```
@@ -102,6 +104,7 @@ simdat <- compilerangesSDM(nulldata = NULLmod, habdata = HABmod,
 ```
 
 ##Whisker Plot of Sampling Distribution Ranges
+
 We'll first produce a whiskers plot showing the range of the sampling distributions produced by the simulations arranged by parametrization.  This is a useful plot for estimatingestimating overlap between outcomes, as well as the overall amount of variance produced by each simulation and structures in variance across parameterizations.
 
 ```{r}
@@ -120,7 +123,9 @@ whiskers <- ggplot(data=simdat, aes(xmin = low, xmax = upp,
         panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 whiskers
 ```
+
 ##Heat Map of Sampling Distribution Overlap
+
 Next we can produce a heat map showing the showing the proportion of overlap between model-parameterization combinations (1 represents complete overlap, 0 represents no overlap).  In order to compare sampling distributions to each other to search for degenerate relationships, we calculate the unidirectional pairwise overlap between all sampling distributions. Each overlap was unidirectional since different model parameterizations produced unequal variances. Thus, the overlap between any two sampling distributions may be (and *is* in this case) asymmetric. We combined all unidirectional pairwise comparisons into matrices of overlap between each combination of models (each matix including all the simulated parameterizations). We then rearrange the data into long format so that we can subsequently call graphing functions from `ggplot2`.
 
 ```{r}
@@ -134,6 +139,7 @@ heatsmelt <- meltheatmats(heats)
 ```
 
 Now we have the overlap calculations such that we can visualize the degree of overlap in resultant sampling distributions for each unidirectional pairwaise model combination (and for each parameterization of those models) 
+
 ```{r}
 #create the component plots
 heatmaplist <- plotheatvector(heatsmelt)
@@ -144,6 +150,7 @@ gridExtra::grid.arrange(grobs = heatmaplist,
                         #layout matrix puts the plots in a clearer order
                         layout_matrix = rbind(c(1,6,2), c(3,4,5)))
 ```
+
 Panels clockwise from top-left: p(HP|RAND) shows the proportion of habitat preference model simulations that overlapped the range of null models for each parameterization; p(HP|CA) shows the proportion of habitat preference model simulations that overlapped the range of conspecific attraction models for each parameterization; p(CA|RAND) shows the proportion of conspecific attraction model simulations that overlapped the range of null models for each parameterization; p(RAND|CA) shows the proportion of null model simulations that overlapped the range of conspecific attraction models for each parameterization;p(CA|HP)shows the proportion of conspecific attraction model simulations that overlapped the range of habitat preference models for each parameterization; p(RAND|HP) shows the proportion of null model simulations that overlapped the range of habitat preference models for each parameterization. 
 
 #Interpretation
@@ -167,6 +174,7 @@ We observed clear structures in the degeneracy of certain model-parameterization
 Ultimately, as with noisy hypotheses, determining if sampling distributions overlap “too much” is up to the judgement of the researcher within the context of the study’s aims. Each unidirectional pairwise proportion of overlap represents the conditional probability of one hypothesis generating response data capable of being produced by another hypothesis. For example, the overlap described by p(HP|Null) is the probability of the habitat preference hypothesis producing convergent results given the null hypothesis. Note that this does not represent the overall probability of mis-specifying a hypothesis as any other because each overlap statement is a probability conditioned on the assumption of a particular model.
 
 ##Revising Hypotheses
+
 Given both the large variance generated for the null model and the high amount of overlap in sampling distributions between several model-parameterization combinations, it’s reasonable to assume that a researcher in this situation would seek to refine their proposed study. There are myriad options for such revision and in a “real world” examination this would rest on the judgement and system-specific knowledge of the researcher as well as the specific aims of the study. We offer a few potential revisions here to illustrate the types of changes that could be made but in no way suggest that these revisions are exhaustive or appropriate to the system. 
 
 By including some spatial measures as part of the observed response pattern, models that converged when considering only proportion of habitat selected may now be parsed. In many instances, the various model-parameterization combinations produced differentiable spatial patterns. For example, many of the models that hypothesized conspecific attraction exhibited strong spatial clustering, likely resulting from the strong influence of the initial settled location (sort of a spatial founder effect).

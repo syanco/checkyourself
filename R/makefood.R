@@ -67,8 +67,9 @@ samplesources <- function(num_samples, food, filename = NULL, writefile = T,
   sampled <- lapply(n, FUN = function(num_sources = n,
                                                 samples = num_samples,
                                                 source = food){
-    replicate(n = samples, c(sample(source[[num_sources]][[1]], size = 1),
-                                 sample(source[[num_sources]][[2]], size = 1)))
+    replicate(n = as.integer(samples),
+              c(sample(source[[num_sources]][[1]], size = 1),
+                sample(source[[num_sources]][[2]], size = 1)))
   })
 
   #get C mean
@@ -118,10 +119,20 @@ samplesources <- function(num_samples, food, filename = NULL, writefile = T,
 #' @return Saves diest source sampled isotope distributions to files of format
 #' used by `MixSIAR`
 #' @export
-samplesourcesvector <- function(n_vec, food, filename = NULL, writefile = T,
+samplesourcesvector <- function(n_vec, food, filepath = NULL, writefile = T,
                                 returnobject = F){
-  sapply(n_vec, samplesources, food = food, filename = filename,
-         writefile = writefile, returnobject = returnobject)
+  out <- NULL
+  for(i in 1:length(n_vec)) {
+    out[[i]] <- samplesources(num_samples = n_vec[i], food = food,
+                         filename = paste0(filepath, "_", n_vec[i], ".csv"),
+                         writefile = writefile, returnobject = returnobject)
+  }
+  if(returnobject == T) {
+    return(out)
+  }
+  # sapply(n_vec, samplesources, food = food,
+  #        filename = paste0(filename,n_vec, ".csv"),
+  #        writefile = writefile, returnobject = returnobject)
 }
 
 #' savesources

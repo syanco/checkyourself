@@ -19,20 +19,57 @@ knitr::opts_chunk$set(
 Questions about this vignette or the `chekyourself` package should be directed to Scott Yanco at: Scott.Yanco@ucdenver.edu  
 
 # Introduction
-This vignette demonstrates how the `checkyourself` package can be used to simulate a simple agent-based model of consumer diet mixing.  Specifically, we simulate the process of trying to recover diet composition of a consumer via stable isotope analysis.  Diet end points' isotopic composition is "measured" from a smaple of varying sizes from each simulated potential prey population.  We explore the effect that estimation uncertaintly (with respect to diet end source isotopic composition) has on our ability to correctly parse the diet components from the consumer isotope mixture distribution.
+This vignette demonstrates how the `checkyourself` package can be used to build and run a simple simulation model of consumer diet mixing.  Specifically, we simulate the process of trying to recover diet composition of a consumer via stable isotope analysis.  Diet end points' isotopic composition is "measured" from a smaple of varying sizes from each simulated potential prey population.  We explore the effect that estimation uncertaintly (with respect to diet end source isotopic composition) has on our ability to correctly parse the diet components from the consumer isotope mixture distribution.
 
-We first set up the set of declarations necessary to run the simulation model. In this construct we will simulate three potential prey populations of 10,000 individuals each. Each has a unique mean $\delta^{13}C$ and $\delta^{15}N$; all populations have equal isotopic variances (1). We supply a "true" proportion of total diet contributed by each potential source population which is the response variable we are ultmiately trying to correctly recover. We simulate a population of 25 consumers consuming prey 100 times each.
+We first set up the set of declarations necessary to run the simulation model. In this construct we will simulate three potential prey populations of 10,000 individuals each. Each has a unique mean $\delta^{13}C$ and $\delta^{15}N$; all populations have equal isotopic variances. We supply a "true" proportion of total diet contributed by each potential source population which is the response variable we are ultmiately trying to correctly recover. We simulate a population of 25 consumers consuming prey 100 times each. Finally, we set a vector of sample sizes to draw from each potential prey source population to estimate the diet end point isotope compositions.  This set of samples will be the parameter space we explore with the model in this vignette.
 
 ```{r}
 library(checkyourself)
 num_sources <- 3 #number of diet endpoints to simulate
 popsize <- c(10000,10000,10000) #size of each diet source pop to simulate
 mu_carb <- c(-1, -10, -30) #vector of "true" mean carbon values for each source
-sd_carb <- c(1,1,1) #vector of "true" carbon source standard deviations
+sd_carb <- c(3,3,3) #vector of "true" carbon source standard deviations
 mu_nit <- c(10,6,11) #vector of "true" mean nitrogen values for each source
-sd_nit <-c(1,1,1) #vector of "true" nitrogen source standard deviations
+sd_nit <-c(3,3,3) #vector of "true" nitrogen source standard deviations
 diet_prop <- c(.1, .25, .65) #"true" proportional diet composition
 steps <- 100 #number of steps per model run
 num_individ <- 25 #number of consumers to simulate
+#vector of sample sizes to use to estimate diet source isotope composition
+sourcesamples <- c(1, 3, 5, 10) 
+```
+
+We can now simulate the "true" diet end source populations and then sample from each population (drawing samples of size `sourcesamples`).
+```{r}
+#make the food sources
+food <- makefood(3, popsize, mu_carb, sd_carb, mu_nit, sd_nit)
+
+# save diet source data to file for import to MixSIAR
+#modify filepath to desired directory relative to workingdirectory.  
+#Do not provide file extension in filename
+samplesourcesvector(n_vec = sourcesamples, food = food, 
+                    filepath = "../test_data/sources", writefile = T, 
+                    returnobject = F)
+```
+
+`MixSIAR` reuires a file to establish discrimination factors.  For this simulation we consider no trophic discrimination (fixed at 0).  Below we create the necessary file.
+
+```{r}
+#create and save discrimination factor data
+savediscrimination(food, filename="../test_data/simulated_discrimination.csv")
+```
+
+Now we can simulate the population of consumers "eating prey" and, subsequently, collect and save the measured isotope values from the simulated consumer tissue. The consumers stochastically consume from the prey populations with the probabilities supplied by `diet_prop`. The consumer isotope values reflect a weighted average of their consumed prey over the length of time defined by `window`, measured at the explicit time step defined by `time`. Here we set the collection time to the final step of the model and collect tissue samples with isitope values integrated over a 10-step window.
+
+```{r}
+#simulate agents over time
+specimens <- eatfood(num_individ = num_individ, steps = steps, 
+                     num_sources = num_sources, diet_prop = diet_prop, 
+                     food = food)
+
+#collect "observed" isotope values
+obs_iso <- getiso(specimens, time = steps, window = 10)
+
+#format to data frame ans save as csv for import to MixSIAR
+formatiso(obs_iso, filename = "../test_data/simulated_iso.csv")
 ```
 
