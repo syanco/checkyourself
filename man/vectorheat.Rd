@@ -16,6 +16,10 @@ the second data set to compare in the `singleheatmat` function. This
 function is intended to recieve the second element of the list produced by
  `getcombos`.}
 }
+\value{
+Returns a list, each element of which is matrix of the sampling
+distribution overlaps as produced by `singleheatmat`.
+}
 \description{
 The vectorized wrapper function for `singleheatmat` that can walk through the
 paired list of model combiantions produced by `getcombos` and produce matrices
