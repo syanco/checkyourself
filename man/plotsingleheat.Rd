@@ -7,10 +7,12 @@
 plotsingleheat(data)
 }
 \arguments{
-\item{data}{}
+\item{data}{A single long-form dataframe object containing the
+parameterizations of the models to be compared and the calculated pairwise
+ unidirectional overlap in distributions.}
 }
 \description{
 Function to creat a `ggplot2` heatmap from a single  "melted" matrix of
 sampling distribution overlap. Intended to be called by vectorized wrapper function, but could be called on a single element of the list produced by
-`meltheatmats` to produce a sinlge heatmap
+`meltheatmats` to produce a single heatmap
 }
