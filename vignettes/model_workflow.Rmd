@@ -1,6 +1,6 @@
 ---
 title: "Using `checkyourself` to simulate species distributions."
-author: "Scott W. Yanco, Andrew L. McDevitt, Laurel M. Hartley, Michael B. Wunder"
+author: "Scott W. Yanco, Andrew L. McDevitt, Clive N. Trueman, Laurel M. Hartley, Michael B. Wunder"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >

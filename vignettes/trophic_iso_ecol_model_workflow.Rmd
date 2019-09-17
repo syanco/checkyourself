@@ -21,6 +21,8 @@ Questions about this vignette or the `chekyourself` package should be directed t
 # Introduction
 This vignette demonstrates how the `checkyourself` package can be used to build and run a simple simulation model of consumer diet mixing.  Specifically, we simulate the process of trying to recover diet composition of a consumer via stable isotope analysis.  Diet end points' isotopic composition is "measured" from a smaple of varying sizes from each simulated potential prey population.  We explore the effect that estimation uncertaintly (with respect to diet end source isotopic composition) has on our ability to correctly parse the diet components from the consumer isotope mixture distribution.
 
+#Set Up and Run Simulations
+
 We first set up the set of declarations necessary to run the simulation model. In this construct we will simulate three potential prey populations of 10,000 individuals each. Each has a unique mean $\delta^{13}C$ and $\delta^{15}N$; all populations have equal isotopic variances. We supply a "true" proportion of total diet contributed by each potential source population which is the response variable we are ultmiately trying to correctly recover. We simulate a population of 25 consumers consuming prey 100 times each. Finally, we set a vector of sample sizes to draw from each potential prey source population to estimate the diet end point isotope compositions.  This set of samples will be the parameter space we explore with the model in this vignette.
 
 ```{r}
@@ -35,7 +37,7 @@ diet_prop <- c(.1, .25, .65) #"true" proportional diet composition
 steps <- 100 #number of steps per model run
 num_individ <- 25 #number of consumers to simulate
 #vector of sample sizes to use to estimate diet source isotope composition
-sourcesamples <- c(1, 3, 5, 10) 
+sourcesamples <- c(3, 5, 10, 100) 
 ```
 
 We can now simulate the "true" diet end source populations and then sample from each population (drawing samples of size `sourcesamples`).
@@ -71,5 +73,118 @@ obs_iso <- getiso(specimens, time = steps, window = 10)
 
 #format to data frame ans save as csv for import to MixSIAR
 formatiso(obs_iso, filename = "../test_data/simulated_iso.csv")
+```
+
+#Analysis
+
+We employ standard trophic iso-ecology analysis tools (`MixSIAR`) to attempt to recover the consumer diet source proportions from the simulated data, given varying sample sizes for the estimation of diet source isotope distributions.
+
+First, we load in the data, including separate objects for our multiple estimates of diet source isotope distributions
+```{r}
+library(MixSIAR)
+library(splancs)
+library(R2jags)
+
+#load consumer/mixture data
+mix <- load_mix_data(filename="../test_data/simulated_iso.csv",
+                     iso_names=c("d13C","d15N"),
+                     factors=NULL,
+                     fac_random=NULL,
+                     fac_nested=NULL,
+                     cont_effects=NULL)
+
+#load diet source data
+source3 <- load_source_data(filename="../test_data/sources_3.csv",
+                           source_factors=NULL,
+                           conc_dep=FALSE,
+                           data_type="means",
+                           mix)
+source5 <- load_source_data(filename="../test_data/sources_5.csv",
+                           source_factors=NULL,
+                           conc_dep=FALSE,
+                           data_type="means",
+                           mix)
+source10 <- load_source_data(filename="../test_data/sources_10.csv",
+                           source_factors=NULL,
+                           conc_dep=FALSE,
+                           data_type="means",
+                           mix)
+source100 <- load_source_data(filename="../test_data/sources_100.csv",
+                           source_factors=NULL,
+                           conc_dep=FALSE,
+                           data_type="means",
+                           mix)
+#load discrimination data
+discr <- load_discr_data(filename="../test_data/simulated_discrimination.csv", mix)
+```
+
+We now build a JAGS model for each diet source composition estimate and fit the model.
+
+```{r}
+# # Write the JAGS model file
+# model_filename <- "../test_data/JAGS_model_1.txt"
+# resid_err <- FALSE
+# process_err <- TRUE
+# write_JAGS_model(model_filename, resid_err, process_err, mix, source1)
+# #run the model (using a 'test' lengthed chain)
+# jags.1 <- run_model(run="very short", mix, source1, discr, model_filename,
+#                     alpha.prior = 1, resid_err, process_err)
+
+model_filename <- "../test_data/JAGS_model_3.txt"
+resid_err <- FALSE
+process_err <- TRUE
+write_JAGS_model(model_filename, resid_err, process_err, mix, source3)
+jags.3 <- run_model(run="very short", mix, source3, discr, model_filename,
+                    alpha.prior = 1, resid_err, process_err)
+
+model_filename <- "../test_data/JAGS_model_5.txt"
+resid_err <- FALSE
+process_err <- TRUE
+write_JAGS_model(model_filename, resid_err, process_err, mix, source5)
+jags.5 <- run_model(run="very short", mix, source5, discr, model_filename,
+                    alpha.prior = 1, resid_err, process_err)
+
+model_filename <- "../test_data/JAGS_model_10.txt"
+resid_err <- FALSE
+process_err <- TRUE
+write_JAGS_model(model_filename, resid_err, process_err, mix, source10)
+jags.10 <- run_model(run="very short", mix, source10, discr, model_filename,
+                    alpha.prior = 1, resid_err, process_err)
+```
+
+```{r}
+#set JAGS output options
+output_options <- list(summary_save = TRUE,
+                       summary_name = "summary_statistics",
+                       sup_post = FALSE,
+                       plot_post_save_pdf = TRUE,
+                       plot_post_name = "posterior_density",
+                       sup_pairs = FALSE,
+                       plot_pairs_save_pdf = TRUE,
+                       plot_pairs_name = "pairs_plot",
+                       sup_xy = TRUE,
+                       plot_xy_save_pdf = FALSE,
+                       plot_xy_name = "xy_plot",
+                       gelman = TRUE,
+                       heidel = FALSE,
+                       geweke = TRUE,
+                       diag_save = TRUE,
+                       diag_name = "diagnostics",
+                       indiv_effect = FALSE,
+                       plot_post_save_png = FALSE,
+                       plot_pairs_save_png = FALSE,
+                       plot_xy_save_png = FALSE)
+
+#view the output
+output_JAGS(jags.3, mix, source3, output_options)
+output_JAGS(jags.5, mix, source5, output_options)
+output_JAGS(jags.10, mix, source10, output_options)
+
+params <- c("p.global")
+summary(window(jags.3, start = 0))
+jags.3$model
+
+
+
 ```
 
