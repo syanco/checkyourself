@@ -35,7 +35,7 @@ settle.hab <- function(n.individ, p.mat, hab.mat, A.coef, ...){
 
   #calculate proportion habitat selected
   hab.sel <- hab.mat[loc] #subset habitat matrix to settled locations
-  sel.p <- sum(hab.sel[hab.sel == A.coef])/length(hab.sel) #calculate proportion within Habitat A
+  sel.p <- length(hab.sel[hab.sel == A.coef])/length(hab.sel) #calculate proportion within Habitat A
   result <- list(loc, sel.p)
   return(result)
 }
