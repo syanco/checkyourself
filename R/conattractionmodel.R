@@ -62,7 +62,7 @@ settle.con <- function(radius, ID.mat, hab.mat, n.individ, A.coef, ...) {
 
   #calculate proportion habitat selected
   hab.sel <- hab.mat[locs]
-  sel.p <- length(hab.sel[hab.sel == A.coef])/length(hab.sel)
+  sel.p <- mean(hab.sel == A.coef)
   result <- list(locs, sel.p)
   return(result)
 }
