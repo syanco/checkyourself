@@ -238,45 +238,4 @@ simlandscapes <- function(A.coef, matsize, count.max = 200, n.clusters,
   return(list(hab.mat, p.mat, IDmat))
 }
 
-#' makeDistProb
-#'
-#'Function to make a matrix of size `matsize` containing probabilities that
-#'decline exponentially by distance from a given cell (`position`). Strength of
-#'exponential decline is given by `lambda`
-#' @param matsize numeric, size of one side of a square matrix on which to
-#' perform calculations
-#' @param position numeric, position from which to generate declining
-#' probability
-#' @param lambda numeric, strength of exponential decline ($\lambda$) where:
-#' $x = \lambda^{-\lambda x}$
-#'
-#' @return
-#' @export
-#'
-#' @examples
-makeDistProb <- function (matsize, position, lambda) {
-  #create new empty matrix
-  d.mat <- matrix(1:matsize^2, nrow = matsize, byrow = F) #create an index matirx
-  x <- sapply(d.mat, matrixPythagoras, IDmat = d.mat, position2 = position)
-  decreasebydist <- lambda*exp((-lambda*x))
-  probmat <- decreasebydist/sum(decreasebydist)
-  }
 
-#' matrixPythagoras
-#'
-#' @param IDmat ID matrix on which to calculate distance, must have cell values
-#' matching 1-D indexing
-#' @param position1 first positions in distance calc
-#' @param position2 second position in dtance calc
-#'
-#' @return returns the pythogorean distance between two coordinates (supplied as
-#'matirx indices)
-#' @export
-#'
-#' @examples
-matrixPythagoras <- function(position1, position2, IDmat){
-  x <- as.numeric(sqrt(((which(d.mat == position1, arr.ind = T)[,"row"]-
-                which(d.mat == position2, arr.ind = T)[,"row"])^2) +
-              (which(d.mat == position1, arr.ind = T)[,"col"]-
-                 which(d.mat == position2, arr.ind = T)[,"col"])^2))
-}
