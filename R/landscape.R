@@ -232,20 +232,51 @@ simlandscapes <- function(A.coef, matsize, count.max = 200, n.clusters,
   hab.mat <- sapply(A.coef, pref.strength, mat = y)
   p.mat <- apply(hab.mat, 2, convert.cell)
   IDmat <- matrix(1:matsize^2, nrow = matsize)
-  if(writeraster = T) {
-    writeRaster(hab.mat, filename = paste0(filename,".tif"))
-  }
+  # if(writeraster = T) {
+  #   writeRaster(hab.mat, filename = paste0(filename,".tif"))
+  # }
   return(list(hab.mat, p.mat, IDmat))
 }
 
-
-rast.prob <- function(r, beta.low, beta.mod, beta.high, ...) { #turnS burn_sev into probs
-  #create reclass matrix to set differene between burn prefs
-  beta.mat <- matrix(c(1, 1, beta.high, 2, 2, beta.mod, 3, 3, beta.low), ncol = 3, byrow = T)
-  r.beta <- reclassify(r, beta.mat)
-  sum.v <- sum(getValues(r.beta))
-  for(i in 1:ncell(r.beta)) {
-    r.beta[i] <- r.beta[i]/sum.v
+#' makeDistProb
+#'
+#'Function to make a matrix of size `matsize` containing probabilities that
+#'decline exponentially by distance from a given cell (`position`). Strength of
+#'exponential decline is given by `lambda`
+#' @param matsize numeric, size of one side of a square matrix on which to
+#' perform calculations
+#' @param position numeric, position from which to generate declining
+#' probability
+#' @param lambda numeric, strength of exponential decline ($\lambda$) where:
+#' $x = \lambda^{-\lambda x}$
+#'
+#' @return
+#' @export
+#'
+#' @examples
+makeDistProb <- function (matsize, position, lambda) {
+  #create new empty matrix
+  d.mat <- matrix(1:matsize^2, nrow = matsize, byrow = F) #create an index matirx
+  x <- sapply(d.mat, matrixPythagoras, IDmat = d.mat, position2 = position)
+  decreasebydist <- lambda*exp((-lambda*x))
+  probmat <- decreasebydist/sum(decreasebydist)
   }
-  return(r.beta)
+
+#' matrixPythagoras
+#'
+#' @param IDmat ID matrix on which to calculate distance, must have cell values
+#' matching 1-D indexing
+#' @param position1 first positions in distance calc
+#' @param position2 second position in dtance calc
+#'
+#' @return returns the pythogorean distance between two coordinates (supplied as
+#'matirx indices)
+#' @export
+#'
+#' @examples
+matrixPythagoras <- function(position1, position2, IDmat){
+  x <- as.numeric(sqrt(((which(d.mat == position1, arr.ind = T)[,"row"]-
+                which(d.mat == position2, arr.ind = T)[,"row"])^2) +
+              (which(d.mat == position1, arr.ind = T)[,"col"]-
+                 which(d.mat == position2, arr.ind = T)[,"col"])^2))
 }
