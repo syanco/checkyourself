@@ -1,13 +1,17 @@
 #overall location selection function
-choose.loc <- function(r, pd.rate, steps, lambda, coef.d, coef.r, blank.rast, ...) {
+choose.loc <- function(r, pd.rate, steps, lambda, coef.d, coef.r, blank.rast, matsize, ...) {
   move.list <- list(c(0,0)) #establish list to store locations
   for (i in 2:steps) {
     #check last location, if at nest - allow hab-based movement
     if (move.list[[i-1]][1] == 0 & move.list[[i-1]][2] == 0)  {
-      list.tmp <- list() #create temp list to store each location per iteration
-      loc <- probsel(r, move.list = move.list, coef.d = coef.d, coef.r = coef.r, blank.rast = blank.rast)
-      list.tmp[1] <- loc@coords[1]
-      list.tmp[2] <- loc@coords[2]
+      list.tmp <- c() #create temp list to store each location per iteration
+      loc <- probsel(r, move.list = move.list, coef.d = coef.d, coef.r = coef.r,
+                     blank.rast = blank.rast, matsize = matsize,
+                     lambda = lambda)
+      #pull the coords out so that we can store as x, y not row, col
+      list.tmp[1] <- loc[2]
+      list.tmp[2] <- loc[1]
+      #update main movelist
       move.list[[i]] <- list.tmp
     } else { #if not at nest, return to nest probabilistically (set by pd.rate)
       if (runif(1) <= pd.rate) {
@@ -17,9 +21,13 @@ choose.loc <- function(r, pd.rate, steps, lambda, coef.d, coef.r, blank.rast, ..
         move.list[[i]] <- list.tmp
       } else {
         list.tmp <- list() #create temp list to store each location per iteration
-        loc <- probsel(r, move.list = move.list, coef.d = coef.d, coef.r = coef.r, blank.rast = blank.rast)
-        list.tmp[1] <- loc@coords[1]
-        list.tmp[2] <- loc@coords[2]
+        loc <- probsel(r, move.list = move.list, coef.d = coef.d, coef.r = coef.r,
+                       blank.rast = blank.rast, matsize = matsize,
+                       lambda = lambda)
+        #pull the coords out so that we can store as x, y not row, col
+        list.tmp[1] <- loc[2]
+        list.tmp[2] <- loc[1]
+        #update main movelist
         move.list[[i]] <- list.tmp
       }
     }
@@ -29,21 +37,15 @@ choose.loc <- function(r, pd.rate, steps, lambda, coef.d, coef.r, blank.rast, ..
 }
 
 #(based on https://scrogster.wordpress.com/2012/04/22/using-r-for-spatial-sampling-with-selection-probabilities-defined-in-a-raster/)
-probsel <- function(r, lambda, move.list, coef.d, coef.r, blank.rast, ...){
-  d <-
+probsel <- function(r, lambda, move.list, coef.d, coef.r, blank.rast, matsize, ...){
+  #get distance probabilities
+  d <- makeDistProb(matsize = matsize, position = 2, lambda = lambda)
+  #combine distance probs with habitat probs, weighted by mixing coefficients
   x <- (coef.d * d) + (coef.r * r)
-  sum.x <- sum(getValues(x))
-  for(i in 1:ncell(x)) {
-    x[i] <- x[i]/sum.x
-  }
-  samp <- sample(nrow(x)*ncol(x), size=1, prob=getValues(x))
-  samprast<-raster(x)
-  #set value of sampled squares to 2 (greater than 1, so we can easily detect it)
-  samprast[samp] <- 2
-  #convert to SpatialPoints
-  points<-rasterToPoints(samprast, fun=function(y){y>1})
-  points<-SpatialPoints(points)
-  return(points)
+  x <- x/sum(x) #convert back to true probabilities
+  samp <- sample(matsize^2, size=1, prob=x)
+  idmat <- matrix(1:matsize^2, nrow = matsize, byrow = F) #create an index matirx
+  coords <- which(idmat == samp, arr.ind = T)
 }
 
 #select the distance raster based on owl's position
