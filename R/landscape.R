@@ -226,11 +226,26 @@ simpatches <- function(matsize, count.max = 200, n.clusters, size.clusters){
 #' element in the list for each value of A.coef supplied.
 #' @export
 simlandscapes <- function(A.coef, matsize, count.max = 200, n.clusters,
-                         size.clusters){
+                         size.clusters, writeraster = F, filename = "1"){
   y <- simpatches(matsize=matsize, n.clusters = n.clusters,
                   size.clusters = size.clusters)
   hab.mat <- sapply(A.coef, pref.strength, mat = y)
   p.mat <- apply(hab.mat, 2, convert.cell)
   IDmat <- matrix(1:matsize^2, nrow = matsize)
+  if(writeraster = T) {
+    writeRaster(hab.mat, filename = paste0(filename,".tif"))
+  }
   return(list(hab.mat, p.mat, IDmat))
+}
+
+
+rast.prob <- function(r, beta.low, beta.mod, beta.high, ...) { #turnS burn_sev into probs
+  #create reclass matrix to set differene between burn prefs
+  beta.mat <- matrix(c(1, 1, beta.high, 2, 2, beta.mod, 3, 3, beta.low), ncol = 3, byrow = T)
+  r.beta <- reclassify(r, beta.mat)
+  sum.v <- sum(getValues(r.beta))
+  for(i in 1:ncell(r.beta)) {
+    r.beta[i] <- r.beta[i]/sum.v
+  }
+  return(r.beta)
 }

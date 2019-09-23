@@ -47,7 +47,7 @@ iteratesourcesamp <- function (folder, num_sources, popsize, mu_carb, sd_carb,
                    mu_carb = mu_carb, sd_carb = sd_carb, mu_nit = mu_nit,
                    sd_nit = sd_nit)
 
-  #sample from pery source populations walking across parameter space of sample
+  #sample from prey source populations walking across parameter space of sample
   #sizes.  Writes source iso estimates to file
   for(i in sourcesamp){
     samplesources(num_samples = i, food = preysource,

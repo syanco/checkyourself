@@ -65,8 +65,8 @@ samplesources <- function(num_samples, food, filename = NULL, writefile = T,
 
   #create a list of sampled prey from each source
   sampled <- lapply(n, FUN = function(num_sources = n,
-                                                samples = num_samples,
-                                                source = food){
+                                      samples = num_samples,
+                                      source = food) {
     replicate(n = as.integer(samples),
               c(sample(source[[num_sources]][[1]], size = 1),
                 sample(source[[num_sources]][[2]], size = 1)))
@@ -120,7 +120,7 @@ samplesources <- function(num_samples, food, filename = NULL, writefile = T,
 #' used by `MixSIAR`
 #' @export
 samplesourcesvector <- function(n_vec, food, filepath = NULL, writefile = T,
-                                returnobject = F){
+                                returnobject = F, ...){
   out <- NULL
   for(i in 1:length(n_vec)) {
     out[[i]] <- samplesources(num_samples = n_vec[i], food = food,
