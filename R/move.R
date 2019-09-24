@@ -32,30 +32,29 @@ chooseLoc <- function(hab.prob, pd.rate, steps, lambda, coef.d, coef.r, blank.ra
   move.list <- list(c(floor(matsize/2), floor(matsize/2))) #start agent in middle
   for (i in 2:steps) {
     #check last location, if at nest - allow hab-based movement
-    if (move.list[[i-1]][1] == 0 & move.list[[i-1]][2] == 0)  {
+    if (move.list[[i-1]][1] == floor(matsize/2) &
+        move.list[[i-1]][2] == floor(matsize/2))  {
       list.tmp <- c() #create temp list to store each location per iteration
       loc <- probsel(hab.prob = hab.prob, move.list = move.list,
                      coef.d = coef.d, coef.r = coef.r, blank.rast = blank.rast,
                      matsize = matsize, lambda = lambda)
       #pull the coords out so that we can store as x, y not row, col
-      list.tmp[1] <- loc[2]
-      list.tmp[2] <- loc[1]
+      list.tmp <- c(loc[2], loc[1])
       #update main movelist
       move.list[[i]] <- list.tmp
     } else { #if not at nest, return to nest probabilistically (set by pd.rate)
       if (runif(1) <= pd.rate) {
         list.tmp <- list()
-        list.tmp[1] <- 0
-        list.tmp[2] <- 0
+        list.tmp <- c(floor(matsize/2), floor(matsize/2))
         move.list[[i]] <- list.tmp
       } else {
         list.tmp <- list() #create temp list to store each location per iteration
-        loc <- probsel(hab.prob, move.list = move.list, coef.d = coef.d, coef.r = coef.r,
+        loc <- probsel(hab.prob = hab.prob, move.list = move.list,
+                       coef.d = coef.d, coef.r = coef.r,
                        blank.rast = blank.rast, matsize = matsize,
                        lambda = lambda)
         #pull the coords out so that we can store as x, y not row, col
-        list.tmp[1] <- loc[2]
-        list.tmp[2] <- loc[1]
+        list.tmp <- c(loc[2], loc[1])
         #update main movelist
         move.list[[i]] <- list.tmp
       }
@@ -127,6 +126,7 @@ makeDistProb <- function (matsize, position, lambda) {
   x <- sapply(d.mat, matrixPythagoras, IDmat = d.mat, position2 = position)
   decreasebydist <- lambda*exp(((-lambda)*x))
   probmat <- decreasebydist/sum(decreasebydist)
+  return(probmat)
 }
 
 #' matrixPythagoras
