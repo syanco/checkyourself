@@ -29,7 +29,7 @@
 #'
 #' @examples
 chooseLoc <- function(hab.prob, pd.rate, steps, lambda, coef.d, coef.r, blank.rast, matsize, ...) {
-  move.list <- list(c(0,0)) #establish list to store locations
+  move.list <- list(c()) #establish list to store locations
   for (i in 2:steps) {
     #check last location, if at nest - allow hab-based movement
     if (move.list[[i-1]][1] == 0 & move.list[[i-1]][2] == 0)  {
