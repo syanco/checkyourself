@@ -34,9 +34,9 @@ chooseLoc <- function(hab.prob, pd.rate, steps, lambda, coef.d, coef.r, blank.ra
     #check last location, if at nest - allow hab-based movement
     if (move.list[[i-1]][1] == 0 & move.list[[i-1]][2] == 0)  {
       list.tmp <- c() #create temp list to store each location per iteration
-      loc <- probsel(r, move.list = move.list, coef.d = coef.d, coef.r = coef.r,
-                     blank.rast = blank.rast, matsize = matsize,
-                     lambda = lambda)
+      loc <- probsel(hab.prob = hab.prob, move.list = move.list,
+                     coef.d = coef.d, coef.r = coef.r, blank.rast = blank.rast,
+                     matsize = matsize, lambda = lambda)
       #pull the coords out so that we can store as x, y not row, col
       list.tmp[1] <- loc[2]
       list.tmp[2] <- loc[1]
