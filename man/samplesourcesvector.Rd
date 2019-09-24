@@ -4,21 +4,21 @@
 \alias{samplesourcesvector}
 \title{samplesourcesvector}
 \usage{
-samplesourcesvector(n_vec, food, filename = NULL, writefile = T,
-  returnobject = F)
+samplesourcesvector(n_vec, food, filepath = NULL, writefile = T,
+  returnobject = F, ...)
 }
 \arguments{
 \item{n_vec}{numeric, vector of sample sizes for sampling from diet sources.}
 
 \item{food}{list object of simulated food sources.}
 
-\item{filename}{name of file to save. Passed to `savesources`.}
-
 \item{writefile}{boolean, whether to write the csv to file needed by MixSIAR
 default is TRUE. Passed to `savesources`.}
 
 \item{returnobject}{boolean, whether to return an object within the current
 environment, default is FALSE. Passed to `savesources`}
+
+\item{filename}{name of file to save. Passed to `savesources`.}
 }
 \value{
 Saves diest source sampled isotope distributions to files of format

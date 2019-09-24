@@ -5,7 +5,7 @@
 \title{simlandscapes}
 \usage{
 simlandscapes(A.coef, matsize, count.max = 200, n.clusters,
-  size.clusters)
+  size.clusters, writeraster = F, filename = "1")
 }
 \arguments{
 \item{A.coef}{Numeric. Can be a number of vector.  Describes the strength(s)
