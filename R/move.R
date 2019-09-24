@@ -152,8 +152,8 @@ makeDistProb <- function (matsize, position, lambda) {
 #' mat <- matrix(1:10000, nrow = 100)
 #'
 matrixPythagoras <- function(position1, position2, IDmat){
-  x <- as.numeric(sqrt(((which(d.mat == position1, arr.ind = T)[,"row"]-
-                           which(d.mat == position2, arr.ind = T)[,"row"])^2) +
-                         (which(d.mat == position1, arr.ind = T)[,"col"]-
-                            which(d.mat == position2, arr.ind = T)[,"col"])^2))
+  x <- as.numeric(sqrt(((which(IDmat == position1, arr.ind = T)[,"row"]-
+                           which(IDmat == position2, arr.ind = T)[,"row"])^2) +
+                         (which(IDmat == position1, arr.ind = T)[,"col"]-
+                            which(IDmat == position2, arr.ind = T)[,"col"])^2))
 }
