@@ -32,8 +32,7 @@ choose.loc <- function(r, pd.rate, steps, lambda, coef.d, coef.r, blank.rast, ma
       }
     }
   }
-  hr.kde.90 <- hrFun(move.list)
-  return(hr.kde.90)
+  return(move.list)
 }
 
 #(based on https://scrogster.wordpress.com/2012/04/22/using-r-for-spatial-sampling-with-selection-probabilities-defined-in-a-raster/)
@@ -48,12 +47,12 @@ probsel <- function(r, lambda, move.list, coef.d, coef.r, blank.rast, matsize, .
   coords <- which(idmat == samp, arr.ind = T)
 }
 
-#select the distance raster based on owl's position
-dist.prob.alt <- function (move.list, blank.rast, ...) {
-  pos <- cellFromXY(blank.rast, as.numeric(tail(move.list, 1)[[1]]))
-  d.rast <- raster(paste0("prob_rast/p", pos,".tif"))
-  return(d.rast)
-}
+# #select the distance raster based on owl's position
+# dist.prob.alt <- function (move.list, blank.rast, ...) {
+#   pos <- cellFromXY(blank.rast, as.numeric(tail(move.list, 1)[[1]]))
+#   d.rast <- raster(paste0("prob_rast/p", pos,".tif"))
+#   return(d.rast)
+# }
 
 #' makeDistProb
 #'
