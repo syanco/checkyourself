@@ -93,21 +93,19 @@ chooseLoc <- function(hab.prob, pd.rate, steps, lambda, coef.d, coef.r, blank.ra
 #' @examples
 probsel <- function(hab.prob, lambda, move.list, coef.d, coef.r, matsize, ...){
   #get distance probabilities
-  d <- makeDistProb(matsize = matsize, position = 2, lambda = lambda)
+  d <- makeDistProb(matsize = matsize,
+                    position = matrixCellFromXY( #get cell ID from move.list
+                      pos = move.list[[length(move.list)]], #use last loc
+                      matsize = matsize),
+                    lambda = lambda)
   #combine distance probs with habitat probs, weighted by mixing coefficients
   x <- (coef.d * d) + (coef.r * hab.prob)
   x <- x/sum(x) #convert back to true probabilities
   samp <- sample(matsize^2, size=1, prob=x)
   idmat <- matrix(1:matsize^2, nrow = matsize, byrow = F) #create an index matirx
   coords <- which(idmat == samp, arr.ind = T)
+  return(coords)
 }
-
-# #select the distance raster based on owl's position
-# dist.prob.alt <- function (move.list, blank.rast, ...) {
-#   pos <- cellFromXY(blank.rast, as.numeric(tail(move.list, 1)[[1]]))
-#   d.rast <- raster(paste0("prob_rast/p", pos,".tif"))
-#   return(d.rast)
-# }
 
 #' makeDistProb
 #'
@@ -157,3 +155,24 @@ matrixPythagoras <- function(position1, position2, IDmat){
                          (which(IDmat == position1, arr.ind = T)[,"col"]-
                             which(IDmat == position2, arr.ind = T)[,"col"])^2))
 }
+
+
+#' matrixCellFromXY
+#'
+#' Gets the cell ID within a matrix using the position format (`c(X, Y)`)
+#' suppplied by `move.list`.
+#'
+#' @param pos vector, a position in the format `c(X, Y)` i.e. `c(col, row)`.
+#' Intended to accept a single position in `move.list`
+#' @param matsize integer, the size of the square matrix on which the simulation
+#' is being run
+#'
+#' @return integer, the cell ID indicated by the X, Y coordinates.
+#' @export
+#'
+#' @examples
+matrixCellFromXY <- function(pos, matsize) {
+  cell <- ((pos[1]-1)*matsize) + pos[2]
+  return(cell)
+}
+
