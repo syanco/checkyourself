@@ -127,7 +127,7 @@ makeDistProb <- function (matsize, position, lambda) {
   #create new empty matrix
   d.mat <- matrix(1:matsize^2, nrow = matsize, byrow = F) #create an index matirx
   x <- sapply(d.mat, matrixPythagoras, IDmat = d.mat, position2 = position)
-  decreasebydist <- lambda*exp((-lambda*x))
+  decreasebydist <- lambda*exp(((-lambda)*x))
   probmat <- decreasebydist/sum(decreasebydist)
 }
 
