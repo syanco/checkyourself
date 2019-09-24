@@ -94,9 +94,7 @@ chooseLoc <- function(hab.prob, pd.rate, steps, lambda, coef.d, coef.r, blank.ra
 probsel <- function(hab.prob, lambda, move.list, coef.d, coef.r, matsize, ...){
   #get distance probabilities
   d <- makeDistProb(matsize = matsize,
-                    position = matrixCellFromXY( #get cell ID from move.list
-                      pos = move.list[[length(move.list)]], #use last loc
-                      matsize = matsize),
+                    position = move.list[[length(move.list)]],
                     lambda = lambda)
   #combine distance probs with habitat probs, weighted by mixing coefficients
   x <- (coef.d * d) + (coef.r * hab.prob)
