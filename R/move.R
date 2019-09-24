@@ -94,7 +94,11 @@ chooseLoc <- function(hab.prob, pd.rate, steps, lambda, coef.d, coef.r, blank.ra
 probsel <- function(hab.prob, lambda, move.list, coef.d, coef.r, matsize, ...){
   #get distance probabilities
   d <- makeDistProb(matsize = matsize,
+<<<<<<< HEAD
                     position = matrixCellFromXY( #get cell ID from move.list
+=======
+                    position = getCellFromXY( #get cell ID from move.list
+>>>>>>> d09ade16cb6b58cec08de1f662bae10cce114872
                       pos = move.list[[length(move.list)]], #use last loc
                       matsize = matsize),
                     lambda = lambda)
@@ -157,7 +161,11 @@ matrixPythagoras <- function(position1, position2, IDmat){
 }
 
 
+<<<<<<< HEAD
 #' matrixCellFromXY
+=======
+#' getCellFromXY
+>>>>>>> d09ade16cb6b58cec08de1f662bae10cce114872
 #'
 #' Gets the cell ID within a matrix using the position format (`c(X, Y)`)
 #' suppplied by `move.list`.
@@ -171,7 +179,11 @@ matrixPythagoras <- function(position1, position2, IDmat){
 #' @export
 #'
 #' @examples
+<<<<<<< HEAD
 matrixCellFromXY <- function(pos, matsize) {
+=======
+getCellFromXY <- function(pos, matsize) {
+>>>>>>> d09ade16cb6b58cec08de1f662bae10cce114872
   cell <- ((pos[1]-1)*matsize) + pos[2]
   return(cell)
 }
