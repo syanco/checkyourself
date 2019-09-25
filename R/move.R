@@ -30,12 +30,12 @@
 #' @examples
 chooseLoc <- function(hab.prob, pd.rate, steps, lambda, coef.d, coef.r, blank.rast, matsize, ...) {
   move.list <- list(c(floor(matsize/2), floor(matsize/2))) #start agent in middle
-  for (i in 2:steps) {
+  for (i in 2:(steps+1)) {
     #check last location, if at nest - allow hab-based movement
     if (move.list[[i-1]][1] == floor(matsize/2) &
         move.list[[i-1]][2] == floor(matsize/2))  {
       list.tmp <- c() #create temp list to store each location per iteration
-      loc <- probsel(hab.prob = hab.prob, move.list = move.list,
+      loc <- probsel(hab.prob = hab.prob, move.list = move.list[[i-1]],
                      coef.d = coef.d, coef.r = coef.r, blank.rast = blank.rast,
                      matsize = matsize, lambda = lambda)
       #pull the coords out so that we can store as x, y not row, col
@@ -49,7 +49,7 @@ chooseLoc <- function(hab.prob, pd.rate, steps, lambda, coef.d, coef.r, blank.ra
         move.list[[i]] <- list.tmp
       } else {
         list.tmp <- list() #create temp list to store each location per iteration
-        loc <- probsel(hab.prob = hab.prob, move.list = move.list,
+        loc <- probsel(hab.prob = hab.prob, move.list = move.list[[i-1]],
                        coef.d = coef.d, coef.r = coef.r,
                        blank.rast = blank.rast, matsize = matsize,
                        lambda = lambda)
@@ -93,7 +93,7 @@ chooseLoc <- function(hab.prob, pd.rate, steps, lambda, coef.d, coef.r, blank.ra
 probsel <- function(hab.prob, lambda, move.list, coef.d, coef.r, matsize, ...){
   #get distance probabilities
   d <- makeDistProb(matsize = matsize,
-                    position = move.list[[length(move.list)]],
+                    position = move.list,
                     lambda = lambda)
   #combine distance probs with habitat probs, weighted by mixing coefficients
   x <- (coef.d * d) + (coef.r * hab.prob)
@@ -123,7 +123,9 @@ probsel <- function(hab.prob, lambda, move.list, coef.d, coef.r, matsize, ...){
 makeDistProb <- function (matsize, position, lambda) {
   #create new empty matrix
   d.mat <- matrix(1:matsize^2, nrow = matsize, byrow = F) #create an index matirx
-  x <- sapply(d.mat, matrixPythagoras, IDmat = d.mat, position2 = position)
+  #need to convert position from X,Y format to matric cell ID
+  pos <- matrixCellFromXY(position, matsize)
+  x <- sapply(d.mat, matrixPythagoras, IDmat = d.mat, position2 = pos)
   decreasebydist <- lambda*exp(((-lambda)*x))
   probmat <- decreasebydist/sum(decreasebydist)
   return(probmat)
@@ -136,8 +138,10 @@ makeDistProb <- function (matsize, position, lambda) {
 #'
 #' @param IDmat matrix, the ID matrix on which to calculate distance, must have
 #' cell values matching 1-D indexing. See examples
-#' @param position1 first positions in distance calc
-#' @param position2 second position in disttance calc
+#' @param position1 integer, first positions in distance calc - must be supplied
+#' as cell ID
+#' @param position2 integer, second positions in distance calc - must be
+#' supplied as cell ID
 #'
 #' @return returns the pythogorean distance between two coordinates (supplied as
 #'matirx indices)
@@ -148,10 +152,10 @@ makeDistProb <- function (matsize, position, lambda) {
 #' mat <- matrix(1:10000, nrow = 100)
 #'
 matrixPythagoras <- function(position1, position2, IDmat){
-  x <- as.numeric(sqrt(((which(IDmat == position1, arr.ind = T)[,"row"]-
-                           which(IDmat == position2, arr.ind = T)[,"row"])^2) +
-                         (which(IDmat == position1, arr.ind = T)[,"col"]-
-                            which(IDmat == position2, arr.ind = T)[,"col"])^2))
+  x <- as.numeric(sqrt(((which(IDmat == position1, arr.ind = T)[2]-
+                           which(IDmat == position2, arr.ind = T)[2])^2) +
+                         (which(IDmat == position1, arr.ind = T)[1]-
+                            which(IDmat == position2, arr.ind = T)[1])^2))
 }
 
 
