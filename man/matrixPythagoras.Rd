@@ -7,9 +7,11 @@
 matrixPythagoras(position1, position2, IDmat)
 }
 \arguments{
-\item{position1}{first positions in distance calc}
+\item{position1}{integer, first positions in distance calc - must be supplied
+as cell ID}
 
-\item{position2}{second position in disttance calc}
+\item{position2}{integer, second positions in distance calc - must be
+supplied as cell ID}
 
 \item{IDmat}{matrix, the ID matrix on which to calculate distance, must have
 cell values matching 1-D indexing. See examples}
