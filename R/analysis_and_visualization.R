@@ -286,3 +286,17 @@ getPropUsed <- function(movelist, hab.mat, A.coef, matsize){
   prop <- sum(habsused == A.coef)/length(habsused)
   return(prop)
 }
+
+#' createKDE
+#'
+#' @param mov
+#'
+#' @return
+#' @export
+#'
+#' @examples
+createKDE <- function (mov) {
+  sp <- sp::SpatialPoints(matrix(unlist(mov), ncol = 2, byrow = T))
+  kde <- adehabitatHR::kernelUD(sp, h = "href")
+  return(kde)
+}
