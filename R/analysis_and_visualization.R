@@ -263,3 +263,26 @@ plotheatvector <- function(meltlist){
   return(maps)
 }
 
+#' getPropUsed
+#'
+#' Function to get the proportion of used locations (from movement model) within
+#'  the habitat matching the value of `A.coef`
+#'
+#' @param movelist The list of locations visitied by agent in a single model
+#' iteration.
+#' @param hab.mat The habitat matrix on which the simulation was run, needs
+#' version with 1's and `A.coef` (not probabilities of cell IDs)
+#' @param A.coef `A.coef` used to simulate habitat - used as key to `hab.mat`
+#' @param matsize The size of one side of the square matrix on which the
+#' simualtion is run
+#'
+#' @return
+#' @export
+#'
+#' @examples
+getPropUsed <- function(movelist, hab.mat, A.coef, matsize){
+  cells <- sapply(movelist, matrixCellFromXY, matsize = matsize)
+  habsused <- hab.mat[cells]
+  prop <- sum(habsused == A.coef)/length(habsused)
+  return(prop)
+}
