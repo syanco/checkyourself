@@ -121,11 +121,9 @@ probsel <- function(hab.prob, lambda, move.list, coef.d, coef.r, matsize, ...){
 #'
 #' @examples
 makeDistProb <- function (matsize, position, lambda) {
-  #create new empty matrix
-  d.mat <- matrix(1:matsize^2, nrow = matsize, byrow = F) #create an index matirx
   #need to convert position from X,Y format to matric cell ID
   pos <- matrixCellFromXY(position, matsize)
-  x <- sapply(d.mat, matrixPythagoras, IDmat = d.mat, position2 = pos)
+  x <- sapply(1:matsize^2, matrixPythagoras, position2 = pos, matsize = matsize)
   decreasebydist <- lambda*exp(((-lambda)*x))
   probmat <- decreasebydist/sum(decreasebydist)
   return(probmat)
