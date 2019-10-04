@@ -136,12 +136,12 @@ makeDistProb <- function (matsize, position, lambda) {
 #' Uses the Pythagorean theorem to calculate the strightline distance between
 #' two matrix cells.
 #'
-#' @param IDmat matrix, the ID matrix on which to calculate distance, must have
-#' cell values matching 1-D indexing. See examples
 #' @param position1 integer, first positions in distance calc - must be supplied
 #' as cell ID
 #' @param position2 integer, second positions in distance calc - must be
 #' supplied as cell ID
+#' #' @param matsize integer, the size in number of cells of one side of the square
+#' matrix on which the simulation is being run.
 #'
 #' @return returns the pythogorean distance between two coordinates (supplied as
 #'matirx indices)
@@ -151,13 +151,11 @@ makeDistProb <- function (matsize, position, lambda) {
 #' #create an example ID matrix for `IDmat`. Example uses a 100x100 matrix
 #' mat <- matrix(1:10000, nrow = 100)
 #'
-matrixPythagoras <- function(position1, position2, IDmat){
-  x <- as.numeric(sqrt(((which(IDmat == position1, arr.ind = T)[2]-
-                           which(IDmat == position2, arr.ind = T)[2])^2) +
-                         (which(IDmat == position1, arr.ind = T)[1]-
-                            which(IDmat == position2, arr.ind = T)[1])^2))
+matrixPythagoras <- function(position1, position2, matsize){
+  dist <- sqrt((ceiling(position1/matsize)-ceiling(position2/matsize))^2+
+                 ((position1 %% matsize)-(position2 %% matsize))^2)
+  return(dist)
 }
-
 
 #' matrixCellFromXY
 #'

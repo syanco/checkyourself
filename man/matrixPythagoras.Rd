@@ -4,17 +4,16 @@
 \alias{matrixPythagoras}
 \title{matrixPythagoras}
 \usage{
-matrixPythagoras(position1, position2, IDmat)
+matrixPythagoras(position1, position2, matsize)
 }
 \arguments{
 \item{position1}{integer, first positions in distance calc - must be supplied
 as cell ID}
 
 \item{position2}{integer, second positions in distance calc - must be
-supplied as cell ID}
-
-\item{IDmat}{matrix, the ID matrix on which to calculate distance, must have
-cell values matching 1-D indexing. See examples}
+supplied as cell ID
+#' @param matsize integer, the size in number of cells of one side of the square
+matrix on which the simulation is being run.}
 }
 \value{
 returns the pythogorean distance between two coordinates (supplied as
