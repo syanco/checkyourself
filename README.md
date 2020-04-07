@@ -151,3 +151,4 @@ Once these models have finished running we can save the results and other necess
 save(p.mat, hab.mat, A.coef, radius, NULLmod, HABmod, CAmod, file = paste0("sdm_sim_", Sys.Date(), ".Rdata"))
 ```
 
+[![DOI](https://zenodo.org/badge/152293679.svg)](https://zenodo.org/badge/latestdoi/152293679)
