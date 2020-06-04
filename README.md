@@ -1,5 +1,5 @@
 # checkyourself
-Repository for the SDM simulation model associated with Yanco et al. 2018 (in prep).
+Repository for the SDM simulation model associated with the paper *A modern method of multiple working hypotheses to improve inference in ecology* [(Yanco et al. 2020)](https://royalsocietypublishing.org/doi/10.1098/rsos.200231).
 
 ## Installation
 If you don't already have `devtools` installed and loaded execute the following:
