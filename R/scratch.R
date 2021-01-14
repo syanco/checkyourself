@@ -20,7 +20,7 @@
 # # savesources(food, filename = "simulated_sources.csv", mu_carb, sd_carb, mu_nit,
 # #             sd_nit, popsize)
 #
-# #sample and save diet source data to file for import to MixSIAR
+#sample and save diet source data to file for import to MixSIAR
 # samplesources(5, food = food, filename = "testsource.csv")
 #
 # #create and save discrimination factor data
@@ -81,27 +81,27 @@
 # # #jags.1 <- run_model(run="normal", mix, source, discr, model_filename,
 # # #                    alpha.prior = 1, resid_err, process_err)
 # #
-# # #set JAGS output options
-# # output_options <- list(summary_save = TRUE,
-# #                        summary_name = "summary_statistics",
-# #                        sup_post = FALSE,
-# #                        plot_post_save_pdf = TRUE,
-# #                        plot_post_name = "posterior_density",
-# #                        sup_pairs = FALSE,
-# #                        plot_pairs_save_pdf = TRUE,
-# #                        plot_pairs_name = "pairs_plot",
-# #                        sup_xy = TRUE,
-# #                        plot_xy_save_pdf = FALSE,
-# #                        plot_xy_name = "xy_plot",
-# #                        gelman = TRUE,
-# #                        heidel = FALSE,
-# #                        geweke = TRUE,
-# #                        diag_save = TRUE,
-# #                        diag_name = "diagnostics",
-# #                        indiv_effect = FALSE,
-# #                        plot_post_save_png = FALSE,
-# #                        plot_pairs_save_png = FALSE,
-# #                        plot_xy_save_png = FALSE)
-# #
-# # #view the output
-# # output_JAGS(jags.1, mix, source, output_options)
+# #set JAGS output options
+# output_options <- list(summary_save = TRUE,
+#                        summary_name = "summary_statistics",
+#                        sup_post = FALSE,
+#                        plot_post_save_pdf = TRUE,
+#                        plot_post_name = "posterior_density",
+#                        sup_pairs = FALSE,
+#                        plot_pairs_save_pdf = TRUE,
+#                        plot_pairs_name = "pairs_plot",
+#                        sup_xy = TRUE,
+#                        plot_xy_save_pdf = FALSE,
+#                        plot_xy_name = "xy_plot",
+#                        gelman = TRUE,
+#                        heidel = FALSE,
+#                        geweke = TRUE,
+#                        diag_save = TRUE,
+#                        diag_name = "diagnostics",
+#                        indiv_effect = FALSE,
+#                        plot_post_save_png = FALSE,
+#                        plot_pairs_save_png = FALSE,
+#                        plot_xy_save_png = FALSE)
+#
+# #view the output
+# output_JAGS(jags.1, mix, source, output_options)
