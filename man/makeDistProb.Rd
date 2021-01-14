@@ -13,8 +13,7 @@ perform calculations}
 \item{position}{numeric, position from which to generate declining
 probability}
 
-\item{lambda}{numeric, strength of exponential decline where:
-$x = \Lambda^{-\Lambda x}$}
+\item{lambda}{numeric, strength of exponential decline}
 }
 \value{
 
