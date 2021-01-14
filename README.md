@@ -1,5 +1,5 @@
 # checkyourself
-Repository for the SDM simulation model associated with Yanco et al. 2018 (in prep).
+Repository for the SDM simulation model associated with the paper *A modern method of multiple working hypotheses to improve inference in ecology* [(Yanco et al. 2020)](https://royalsocietypublishing.org/doi/10.1098/rsos.200231).
 
 ## Installation
 If you don't already have `devtools` installed and loaded execute the following:
@@ -14,13 +14,13 @@ install_github("syanco/checkyourself")
 ```
 ## How to Use
 
-**Citation:** Yanco, SW, AL McDevitt, LM Hartley, and MB Wunder. Check yourself: using agent-based models to test the logic of hypotheses. *In prep*.  
+**Citation:** Yanco, SW, AL McDevitt, CN Trueman, LM Hartley, and MB Wunder. A modern method of multiple working hypotheses to improve inference in ecology. R. Soc. open sci.7200231 http://doi.org/10.1098/rsos.200231 
 
 Questions about this vignette or the `chekyourself` package should be directed to Scott Yanco at: Scott.Yanco@ucdenver.edu  
 
 ### Introduction
 
-This vignette demonstrates how the `checkyourself` package can be used to simulate a simple agent-based species distribution model (SDM) in a hypothesis vetting process (Yanco et al. *in prep*).  Running this vignette with the parameterizations provided will match the workflow described in Yanco et al. Note that the number of parameterizations and model iterations is large and may take a substantial amount of time to complete. Analysis of the data produced by these simulations is not included in the package or this vignette, but may be found as part of the supplementary information accompanying the manuscript. Note also that many of the processes documented here are stochastic in nature so results will not match exactly those described in the manuscript.  
+This vignette demonstrates how the `checkyourself` package can be used to simulate a simple agent-based species distribution model (SDM) in a hypothesis vetting process (Yanco et al. 2020).  Running this vignette with the parameterizations provided will match the workflow described in Yanco et al. Note that the number of parameterizations and model iterations is large and may take a substantial amount of time to complete. Analysis of the data produced by these simulations is not included in the package or this vignette, but may be found as part of the supplementary information accompanying the manuscript. Note also that many of the processes documented here are stochastic in nature so results will not match exactly those described in the manuscript.  
 
 This package contains code to simulate a patchy landscape consisting of two habitat types and to implement three SDM models on that landscape:  
 1. **Null Model:** Individuals settle the landscape randomly with no influence of habitat or neighbors.  
@@ -151,3 +151,4 @@ Once these models have finished running we can save the results and other necess
 save(p.mat, hab.mat, A.coef, radius, NULLmod, HABmod, CAmod, file = paste0("sdm_sim_", Sys.Date(), ".Rdata"))
 ```
 
+[![DOI](https://zenodo.org/badge/152293679.svg)](https://zenodo.org/badge/latestdoi/152293679)
