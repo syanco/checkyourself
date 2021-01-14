@@ -11,6 +11,9 @@ plotsingleheat(data)
 parameterizations of the models to be compared and the calculated pairwise
  unidirectional overlap in distributions.}
 }
+\value{
+
+}
 \description{
 Function to creat a `ggplot2` heatmap from a single  "melted" matrix of
 sampling distribution overlap. Intended to be called by vectorized wrapper function, but could be called on a single element of the list produced by

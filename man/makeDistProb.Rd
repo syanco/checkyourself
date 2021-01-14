@@ -13,8 +13,11 @@ perform calculations}
 \item{position}{numeric, position from which to generate declining
 probability}
 
-\item{lambda}{numeric, strength of exponential decline ($\lambda$) where:
+\item{lambda}{numeric, strength of exponential decline where:
 $x = \lambda^{-\lambda x}$}
+}
+\value{
+
 }
 \description{
 Function to make a matrix of size `matsize` containing probabilities that

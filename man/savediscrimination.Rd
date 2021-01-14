@@ -4,8 +4,14 @@
 \alias{savediscrimination}
 \title{savediscrimination}
 \usage{
-savediscrimination(food, filename = NULL, discr_carb = c(0, 0, 0),
-  discr_nit = c(0, 0, 0), writefile = T, returnobject = F)
+savediscrimination(
+  food,
+  filename = NULL,
+  discr_carb = c(0, 0, 0),
+  discr_nit = c(0, 0, 0),
+  writefile = T,
+  returnobject = F
+)
 }
 \arguments{
 \item{food}{list object of simulated food sources}

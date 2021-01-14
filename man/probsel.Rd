@@ -27,6 +27,9 @@ matrix on which the simulation is being run.}
 
 \item{...}{}
 }
+\value{
+
+}
 \description{
 Makes probabalistic selections of a cell based on the mixture of two
 probability matrices. Not intended to be called directly - used by

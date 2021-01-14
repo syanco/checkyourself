@@ -4,8 +4,13 @@
 \alias{samplesources}
 \title{samplesources}
 \usage{
-samplesources(num_samples, food, filename = NULL, writefile = T,
-  returnobject = F)
+samplesources(
+  num_samples,
+  food,
+  filename = NULL,
+  writefile = T,
+  returnobject = F
+)
 }
 \arguments{
 \item{num_samples}{Integer, the number of samples to colect from each prey

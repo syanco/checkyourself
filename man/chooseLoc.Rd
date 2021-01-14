@@ -4,8 +4,17 @@
 \alias{chooseLoc}
 \title{chooseLoc}
 \usage{
-chooseLoc(hab.prob, pd.rate, steps, lambda, coef.d, coef.r, blank.rast,
-  matsize, ...)
+chooseLoc(
+  hab.prob,
+  pd.rate,
+  steps,
+  lambda,
+  coef.d,
+  coef.r,
+  blank.rast,
+  matsize,
+  ...
+)
 }
 \arguments{
 \item{hab.prob}{matrix, the habitat matrix with cell values representing the

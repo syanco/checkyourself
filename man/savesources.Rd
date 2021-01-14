@@ -4,8 +4,17 @@
 \alias{savesources}
 \title{savesources}
 \usage{
-savesources(food, filename = NULL, mu_carb, sd_carb, mu_nit, sd_nit,
-  popsize, writefile = T, returnobject = F)
+savesources(
+  food,
+  filename = NULL,
+  mu_carb,
+  sd_carb,
+  mu_nit,
+  sd_nit,
+  popsize,
+  writefile = T,
+  returnobject = F
+)
 }
 \arguments{
 \item{food}{list object of simulated food sources}

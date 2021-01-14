@@ -4,8 +4,20 @@
 \alias{iteratesourcesamp}
 \title{iteratesourcesamp}
 \usage{
-iteratesourcesamp(folder, num_sources, popsize, mu_carb, sd_carb, mu_nit,
-  sd_nit, sourcesamp, num_individ, steps, diet_prop, window)
+iteratesourcesamp(
+  folder,
+  num_sources,
+  popsize,
+  mu_carb,
+  sd_carb,
+  mu_nit,
+  sd_nit,
+  sourcesamp,
+  num_individ,
+  steps,
+  diet_prop,
+  window
+)
 }
 \arguments{
 \item{folder}{String, path to folder where simulated data should be saved}

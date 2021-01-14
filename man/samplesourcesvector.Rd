@@ -4,8 +4,14 @@
 \alias{samplesourcesvector}
 \title{samplesourcesvector}
 \usage{
-samplesourcesvector(n_vec, food, filepath = NULL, writefile = T,
-  returnobject = F, ...)
+samplesourcesvector(
+  n_vec,
+  food,
+  filepath = NULL,
+  writefile = T,
+  returnobject = F,
+  ...
+)
 }
 \arguments{
 \item{n_vec}{numeric, vector of sample sizes for sampling from diet sources.}

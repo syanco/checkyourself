@@ -9,6 +9,9 @@ createKDE(mov)
 \arguments{
 \item{mov}{movement data supplied in format produced by `chooseLoc`}
 }
+\value{
+
+}
 \description{
 Ceeates a kernel density estimate based on simulated movement data
 }

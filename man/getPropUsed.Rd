@@ -18,6 +18,9 @@ version with 1's and `A.coef` (not probabilities of cell IDs)}
 \item{matsize}{The size of one side of the square matrix on which the
 simualtion is run}
 }
+\value{
+
+}
 \description{
 Function to get the proportion of used locations (from movement model) within
  the habitat matching the value of `A.coef`
