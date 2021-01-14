@@ -114,7 +114,7 @@ probsel <- function(hab.prob, lambda, move.list, coef.d, coef.r, matsize, ...){
 #' @param position numeric, position from which to generate declining
 #' probability
 #' @param lambda numeric, strength of exponential decline where:
-#' $x = \lambda^{-\lambda x}$
+#' $x = \Lambda^{-\Lambda x}$
 #'
 #' @return
 #' @export

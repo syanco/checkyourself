@@ -14,7 +14,7 @@ perform calculations}
 probability}
 
 \item{lambda}{numeric, strength of exponential decline where:
-$x = \lambda^{-\lambda x}$}
+$x = \Lambda^{-\Lambda x}$}
 }
 \value{
 
